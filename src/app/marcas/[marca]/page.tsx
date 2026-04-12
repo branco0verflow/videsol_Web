@@ -36,7 +36,7 @@ export default async function MarcaPage({ params }: Props) {
     <>
       <Navbar />
       <main>
-        <BrandPage brand={brand} vehicles={vehicles as unknown as import('@/components/VehicleCard').Vehicle[]} />
+        <BrandPage brand={brand} vehicles={vehicles} />
       </main>
       <Footer />
     </>

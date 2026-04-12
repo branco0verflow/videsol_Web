@@ -50,9 +50,7 @@ export default function FeaturedVehicles() {
   })
 
   // Seleccionar lista según catálogo activo
-  const listaBase = (filtros.catalogo === 'okm'
-    ? vehiculos.okm
-    : vehiculos.usados) as unknown as Vehicle[]
+  const listaBase = filtros.catalogo === 'okm' ? vehiculos.okm : vehiculos.usados
 
   const vehiculosFiltrados = aplicarFiltros(listaBase, filtros)
 
@@ -122,7 +120,7 @@ export default function FeaturedVehicles() {
             <h2 className="section-heading text-[26px] sm:text-[32px] font-medium text-slate-900 leading-tight opacity-0">
               {TITULO[filtros.catalogo]}
             </h2>
-            <span className="text-[13px] text-slate-400 hidden sm:block flex-shrink-0">
+            <span className="text-[13px] text-slate-400 hidden sm:block shrink-0">
               {vehiculosFiltrados.length}{' '}
               {vehiculosFiltrados.length === 1 ? 'vehículo' : 'vehículos'} disponibles
             </span>
