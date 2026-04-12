@@ -28,7 +28,9 @@ export interface Vehicle {
   descripcion:  string
   prin:         string
   imagenes:     string[]
-  catalogo?:    string | null
+  catalogo?:          string | null
+  colorSeleccionado?: string
+  colores?:           Array<{ nombre: string; swatch: string; prin: string; imagenes: string[] }>
 }
 
 interface VehicleCardProps {

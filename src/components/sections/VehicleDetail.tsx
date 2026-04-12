@@ -8,28 +8,37 @@ import ContactModal from '@/components/ui/ContactModal'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
+export interface ColorOption {
+  nombre:   string
+  swatch:   string
+  prin:     string
+  imagenes: string[]
+}
+
 export interface VehicleData {
-  id:           string
-  marca:        string
-  modelo:       string
-  version:      string
-  anio:         number
-  km:           number
-  precio:       number
-  tipo:         string | null
-  cilindrada:   string | null
-  potencia:     string | null
-  combustible:  string | null
-  color:        string | null
-  puertas:      number
-  direccion:    string | null
-  transmision:  string | null
-  garantia:     boolean
-  financiacion: boolean
-  descripcion:  string
-  prin:         string
-  imagenes:     string[]
-  catalogo?:    string | null
+  id:                string
+  marca:             string
+  modelo:            string
+  version:           string
+  anio:              number
+  km:                number
+  precio:            number
+  tipo:              string | null
+  cilindrada:        string | null
+  potencia:          string | null
+  combustible:       string | null
+  color:             string | null
+  puertas:           number
+  direccion:         string | null
+  transmision:       string | null
+  garantia:          boolean
+  financiacion:      boolean
+  descripcion:       string
+  prin:              string
+  imagenes:          string[]
+  catalogo?:         string | null
+  colorSeleccionado?: string
+  colores?:          ColorOption[]
 }
 
 interface VehicleDetailProps {
@@ -116,17 +125,37 @@ function formatPrice(price: number) {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
+  const defaultColor = vehicle.colores?.find(c => c.nombre === vehicle.colorSeleccionado)
+                    ?? vehicle.colores?.[0]
+                    ?? null
+
   const [activeIdx, setActiveIdx]         = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [paused, setPaused]               = useState(false)
   const [activeTab, setActiveTab]         = useState('seguridad')
   const [modalOpen, setModalOpen]         = useState(false)
+  const [selectedColor, setSelectedColor] = useState<ColorOption | null>(defaultColor)
 
-  const mainImgRef = useRef<HTMLDivElement>(null)
-  const infoRef    = useRef<HTMLDivElement>(null)
-  const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
+  const mainImgRef  = useRef<HTMLDivElement>(null)
+  const galleryRef  = useRef<HTMLDivElement>(null)
+  const infoRef     = useRef<HTMLDivElement>(null)
+  const timerRef    = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const total = vehicle.imagenes.length
+  const activeImages = selectedColor?.imagenes ?? vehicle.imagenes
+  const total        = activeImages.length
+
+  const handleColorChange = (color: ColorOption) => {
+    if (color.nombre === selectedColor?.nombre) return
+    setSelectedColor(color)
+    setActiveIdx(0)
+    setPaused(false)
+    if (galleryRef.current) {
+      gsap.fromTo(galleryRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.35, ease: 'power2.out' }
+      )
+    }
+  }
 
   // ── Entrance animation ──
   useEffect(() => {
@@ -200,11 +229,12 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
               {/* Main image */}
               <div
+                ref={galleryRef}
                 className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/3]"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
-                {vehicle.imagenes.map((src, i) => (
+                {activeImages.map((src, i) => (
                   <div
                     key={i}
                     className="absolute inset-0 transition-opacity duration-350 ease-in-out"
@@ -273,7 +303,7 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
                 {/* Dots */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
-                  {vehicle.imagenes.map((_, i) => (
+                  {activeImages.map((_, i) => (
                     <button
                       key={i}
                       aria-label='imagen'
@@ -288,7 +318,7 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
               {/* Thumbnails */}
               <div className="flex gap-2.5 mt-3 overflow-x-auto pb-1">
-                {vehicle.imagenes.map((src, i) => (
+                {activeImages.map((src, i) => (
                   <button
                     key={i}
                     onClick={() => handleThumbClick(i)}
@@ -371,6 +401,46 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                   <span className="text-[13px] text-slate-400 ml-2">USD</span>
                 </div>
               </div>
+
+              {/* ── Color selector (solo 0km con colores) ── */}
+              {isNew && vehicle.colores && vehicle.colores.length > 1 && (
+                <div className="px-7 py-5 border-b border-slate-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-semibold tracking-[2px] text-slate-400 uppercase">
+                      Color
+                    </p>
+                    <span className="text-[12px] text-slate-600 font-medium">
+                      {selectedColor?.nombre}
+                    </span>
+                  </div>
+                  <div className="flex gap-2.5 flex-wrap">
+                    {vehicle.colores.map((color) => {
+                      const isActive = selectedColor?.nombre === color.nombre
+                      return (
+                        <button
+                          key={color.nombre}
+                          onClick={() => handleColorChange(color)}
+                          suppressHydrationWarning
+                          title={color.nombre}
+                          className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                            isActive
+                              ? 'border-[#1e3a5f] scale-105 shadow-md'
+                              : 'border-transparent opacity-60 hover:opacity-100 hover:border-slate-300'
+                          }`}
+                        >
+                          <Image
+                            src={color.swatch}
+                            alt={color.nombre}
+                            fill
+                            sizes="56px"
+                            className="object-cover"
+                          />
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Specs */}
               <div className="px-7 py-5 border-b border-slate-100">
