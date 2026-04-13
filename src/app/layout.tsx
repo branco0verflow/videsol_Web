@@ -24,14 +24,14 @@ const bebasNeue = Bebas_Neue({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://videsol.com.uy"),
+  metadataBase: new URL("https://videsol-web.vercel.app"),
 
   title: {
-    default: "Videsol — Automotora | Colonia del Sacramento",
+    default: "Videsol",
     template: "%s | Videsol",
   },
   description:
-    "Videsol, tu automotora de confianza en Colonia del Sacramento. Más de 50 años. BYD, Nissan, Citroën, Peugeot, Riddara, Renault y Subaru. Servicio mecánico.",
+    "Videsol, Concesionaria oficial con mas de 45 años de trayectoria en el mercado automotor del departamento de Colonia.",
 
   // ── Favicons ──────────────────────────────────────────────────
   icons: {
@@ -45,10 +45,10 @@ export const metadata: Metadata = {
 
   // ── Open Graph (WhatsApp, Facebook, LinkedIn) ──────────────────
   openGraph: {
-    title: "Videsol — Automotora | Colonia del Sacramento",
+    title: "Videsol",
     description:
-      "Tu automotora de confianza en Colonia del Sacramento. 0 km y usados con garantía. BYD, Nissan, Citroën, Peugeot, Riddara, Renault y Subaru.",
-    url: "https://videsol.com.uy",
+      "Videsol, Concesionaria oficial con mas de 45 años de trayectoria en el mercado automotor del departamento de Colonia.",
+    url: "https://videsol.com",
     siteName: "Videsol",
     locale: "es_UY",
     type: "website",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Videsol — Automotora en Colonia del Sacramento",
+        alt: "Videsol — Concesionaria oficial",
       },
     ],
   },
