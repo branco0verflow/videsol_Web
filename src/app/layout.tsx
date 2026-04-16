@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/og-image.jpg",
+        url: "/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Videsol — Concesionaria oficial",
@@ -77,7 +77,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${outfit.variable} ${bebasNeue.variable} ${oswald.variable}`} suppressHydrationWarning>
-      <body>{children}</body>
+      <body className="overflow-x-hidden">{children}</body>
     </html>
   );
 }
