@@ -48,13 +48,13 @@ export const metadata: Metadata = {
     title: "Videsol",
     description:
       "Videsol, Concesionaria oficial con mas de 45 años de trayectoria en el mercado automotor del departamento de Colonia.",
-    url: "https://videsol.com",
+    url: "https://videsol-web.vercel.app",
     siteName: "Videsol",
     locale: "es_UY",
     type: "website",
     images: [
       {
-        url: "/images/og-image.png",
+        url: "https://videsol-web.vercel.app/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Videsol — Concesionaria oficial",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     title: "Videsol — Automotora | Colonia del Sacramento",
     description:
       "Tu automotora de confianza en Colonia del Sacramento. BYD, Nissan, Citroën, Peugeot, Riddara, Renault y Subaru.",
-    images: ["/images/og-image.jpg"],
+    images: ["https://videsol-web.vercel.app/images/og-image.png"],
   },
 };
 
