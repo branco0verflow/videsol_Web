@@ -10,6 +10,13 @@
   --color-border: #E2E8F0;
   --font-outfit: var(--font-outfit);
   --font-bebas: var(--font-bebas);
+
+  --animate-marquee: marquee 18s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
 }
 
 html {

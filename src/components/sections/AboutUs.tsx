@@ -4,98 +4,150 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ShieldCheck, Award, Users, Handshake } from "lucide-react";
+import { ShieldCheck, Award, Users, Handshake, ImageIcon } from "lucide-react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const values = [
-  { icon: ShieldCheck, title: "Transparencia", desc: "Documentación al día, sin letra chica ni sorpresas."      },
-  { icon: Award,       title: "Calidad",        desc: "Cada vehículo pasa por revisión técnica certificada."    },
-  { icon: Users,       title: "Atención",        desc: "Asesoramiento personalizado real, sin presión."          },
-  { icon: Handshake,   title: "Confianza",       desc: "Más de 50 años respaldando cada venta."                  },
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const stats = [
+  { value: "+45", label: "Años en el mercado" },
+  { value: "7", label: "Marcas oficiales" },
+  { value: "100%", label: "Garantía de fábrica" },
 ];
+
+const values = [
+  { icon: ShieldCheck, title: "Transparencia", desc: "Sin letra chica ni sorpresas." },
+  { icon: Award, title: "Calidad", desc: "Revisión técnica certificada." },
+  { icon: Users, title: "Atención", desc: "Asesoramiento real, sin presión." },
+  { icon: Handshake, title: "Confianza", desc: "45 años respaldando cada venta." },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function AboutUs() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(".about-left", {
-        opacity: 0, x: -60, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: ".about-left", start: "top 80%", once: true },
+      gsap.from(".about-badge, .about-heading, .about-body, .about-stats", {
+        opacity: 0, y: 28, duration: 0.8, stagger: 0.1, ease: "power3.out",
+        scrollTrigger: { trigger: ".about-badge", start: "top 82%", once: true },
       });
-      gsap.from(".about-right", {
-        opacity: 0, x: 60, duration: 1, ease: "power3.out",
-        scrollTrigger: { trigger: ".about-right", start: "top 80%", once: true },
+      gsap.from(".about-image-col", {
+        opacity: 0, x: 50, duration: 1, ease: "power3.out",
+        scrollTrigger: { trigger: ".about-image-col", start: "top 80%", once: true },
       });
-      gsap.from(".value-card", {
-        opacity: 0, y: 30, stagger: 0.1, duration: 0.6, ease: "power3.out",
-        scrollTrigger: { trigger: ".value-card", start: "top 88%", once: true },
+      gsap.from(".value-pill", {
+        opacity: 0, x: -16, stagger: 0.08, duration: 0.5, ease: "power3.out",
+        scrollTrigger: { trigger: ".value-pill", start: "top 90%", once: true },
       });
     },
     { scope: sectionRef }
   );
 
   return (
-    <section id="nosotros" ref={sectionRef} className="bg-surface py-24 lg:py-32">
+    <section id="nosotros" ref={sectionRef} className="bg-white py-24 lg:py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
-          {/* Left */}
-          <div className="about-left">
-            <div className="flex items-center gap-2.5 mb-5">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+          {/* ── Left: text ─────────────────────────────────────────── */}
+          <div>
+            <div className="about-badge flex items-center gap-2.5 mb-6">
               <span className="w-6 h-0.5 bg-navy rounded-full" />
               <p className="text-navy text-xs font-bold tracking-[0.25em] uppercase">Sobre nosotros</p>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-black text-slate-900 leading-tight mb-8">
-              Más de cinco décadas<br />
+
+            <h2 className="about-heading text-4xl lg:text-[2.75rem] font-black text-slate-900 leading-[1.12] mb-6">
+              Más de cuatro décadas<br />
               <span className="text-gradient">al servicio</span> del<br />
               automovilista uruguayo.
             </h2>
-            <div className="space-y-4 text-slate-500 leading-relaxed text-[15px]">
+
+            <div className="about-body space-y-4 text-slate-500 leading-relaxed text-[15px] mb-10">
               <p>
-                Videsol nació en Colonia del Sacramento con una misión simple:
-                conectar a las personas con el vehículo que necesitan, con
-                honestidad, precios justos y atención de calidad.
+                Videsol se guía por una convicción clara:
+                cada persona merece encontrar el vehículo que se ajusta a sus necesidades,
+                respaldada por asesoramiento profesional, precios transparentes con servicio postventa.
               </p>
               <p>
-                Con más de 50 años en el mercado, nos convertimos en la
-                automotora de referencia de la región, representando marcas
-                oficiales como BYD, Nissan, Peugeot, Renault, Citroën, Subaru y Riddara.
-              </p>
-              <p>
-                Cada venta es el comienzo de una relación. Por eso también
-                contamos con servicio mecánico certificado, para que tu
-                inversión esté siempre respaldada.
+                Representantes oficiales de BYD, Nissan, Peugeot, Renault,
+                Citroën, Subaru y Riddara — con servicio mecánico certificado
+                para que tu inversión esté siempre respaldada.
               </p>
             </div>
-          </div>
 
-          {/* Right */}
-          <div className="about-right">
-            <div className="relative mb-6 p-8 bg-navy rounded-3xl overflow-hidden">
-              <div className="absolute -top-6 -right-6 text-[130px] font-black text-white/5 leading-none select-none">50</div>
-              <p className="text-white/60 text-xs font-bold tracking-[0.25em] uppercase mb-2">
-                Fundada hace más de 50 años
-              </p>
-              <p className="text-3xl font-black text-white mb-1">Colonia del Sacramento</p>
-              <p className="text-white/50 text-sm">Uruguay — José Pedro Varela 593</p>
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-crimson" />
+            {/* Stats */}
+            <div className="about-stats flex items-center gap-0 mb-10">
+              {stats.map((s, i) => (
+                <div key={s.label} className="flex items-center gap-0">
+                  <div className={`${i !== 0 ? 'pl-6' : ''} ${i !== stats.length - 1 ? 'pr-6' : ''}`}>
+                    <p className="text-[2rem] font-black text-navy leading-none">{s.value}</p>
+                    <p className="text-slate-400 text-xs mt-1 leading-tight">{s.label}</p>
+                  </div>
+                  {i < stats.length - 1 && (
+                    <div className="w-px h-10 bg-slate-200 shrink-0" />
+                  )}
+                </div>
+              ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {/* Value pills */}
+            <div className="grid grid-cols-2 gap-2.5">
               {values.map((v) => (
-                <div
-                  key={v.title}
-                  className="value-card bg-white border border-border rounded-2xl p-5 hover:border-navy/25 hover:shadow-[0_4px_16px_rgba(27,58,107,0.07)] transition-all duration-300"
-                >
-                  <v.icon size={18} className="text-navy mb-3" />
-                  <p className="text-slate-800 font-bold text-sm mb-1">{v.title}</p>
-                  <p className="text-slate-400 text-xs leading-relaxed">{v.desc}</p>
+                <div key={v.title} className="value-pill flex items-start gap-3 bg-surface border border-border rounded-2xl px-4 py-3.5">
+                  <div className="w-7 h-7 rounded-lg bg-navy/8 flex items-center justify-center shrink-0 mt-0.5">
+                    <v.icon size={14} className="text-navy" />
+                  </div>
+                  <div>
+                    <p className="text-slate-800 font-bold text-[13px]">{v.title}</p>
+                    <p className="text-slate-400 text-[11px] leading-relaxed">{v.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* ── Right: image ───────────────────────────────────────── */}
+          <div className="about-image-col flex flex-col gap-4">
+
+            {/* Main photo placeholder */}
+            <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-navy">
+              {/* decorative grid */}
+              <div
+                className="absolute inset-0 opacity-[0.04]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+                  backgroundSize: "40px 40px",
+                }}
+              />
+              {/* corner accents */}
+              <div className="absolute top-5 left-5 w-10 h-10 border-l-2 border-t-2 border-white/20 rounded-tl-lg" />
+              <div className="absolute top-5 right-5 w-10 h-10 border-r-2 border-t-2 border-white/20 rounded-tr-lg" />
+              <div className="absolute bottom-5 left-5 w-10 h-10 border-l-2 border-b-2 border-white/20 rounded-bl-lg" />
+              <div className="absolute bottom-5 right-5 w-10 h-10 border-r-2 border-b-2 border-white/20 rounded-br-lg" />
+
+              {/* center placeholder */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/25">
+                <ImageIcon size={36} strokeWidth={1.2} />
+              </div>
+
+              {/* bottom overlay with address */}
+              <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent px-6 py-5">
+                <p className="text-white font-bold text-[15px]">Videsol — Colonia del Sacramento</p>
+                <p className="text-white/60 text-xs mt-0.5">José Pedro Varela 593, Uruguay</p>
+              </div>
+
+              {/* crimson accent bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-crimson" />
+            </div>
+
+
+
+          </div>
+
         </div>
       </div>
     </section>

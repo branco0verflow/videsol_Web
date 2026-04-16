@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 
   title: {
     default: "Videsol",
-    template: "%s | Videsol",
+    template: "%s Concesionaria oficial",
   },
   description:
     "Videsol, Concesionaria oficial con mas de 45 años de trayectoria en el mercado automotor del departamento de Colonia.",

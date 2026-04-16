@@ -5,7 +5,6 @@ import Stats from "@/components/sections/Stats";
 import FeaturedVehicles from "@/components/sections/FeaturedVehicles";
 import Brands from "@/components/sections/Brands";
 import AboutUs from "@/components/sections/AboutUs";
-import Services from "@/components/sections/Services";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
@@ -18,8 +17,7 @@ export default function Home() {
         <FeaturedVehicles />
         <Brands />
         <AboutUs />
-        <Services />
-        <Contact />
+<Contact />
       </main>
       <Footer />
     </>

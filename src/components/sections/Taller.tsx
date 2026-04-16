@@ -50,7 +50,7 @@ const saleBanners = [
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function Services() {
+export default function Taller() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(

@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const stats = [
-  { value: 50,     suffix: "+",  label: "Años de experiencia",  large: false },
+  { value: 45,     suffix: "+",  label: "Años de experiencia",  large: false },
   { value: 100000, suffix: "+",  label: "Autos vendidos",        large: true  },
   { value: 7,      suffix: "",   label: "Marcas oficiales",      large: false },
   { value: 100,    suffix: "%",  label: "Garantía respaldada",   large: false },
