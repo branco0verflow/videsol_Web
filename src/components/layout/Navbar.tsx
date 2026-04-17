@@ -82,9 +82,12 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Spacer para compensar el navbar fixed */}
+      <div className="h-15.5 lg:h-17.5" />
+
       {/* ── Navbar ──────────────────────────────────────────────────── */}
       <nav
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300 ${
           scrolled
             ? "bg-white/95 backdrop-blur-md shadow-[0_2px_24px_rgba(0,0,0,0.09)]"
             : "bg-white border-b border-border"
