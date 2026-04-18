@@ -167,9 +167,15 @@ export default function Footer() {
             ))}
           </div>
 
-          <p className="text-[11px] text-white/20 order-3 hidden sm:block">
-            Colonia del Sacramento, Uruguay
-          </p>
+          <div className="flex items-center gap-4 order-3 max-sm:hidden">
+            <p className="text-[11px] text-white/20">Colonia del Sacramento, Uruguay</p>
+            <Link
+              href="/admin"
+              className="text-[10px] text-white/10 hover:text-white/40 transition-colors tracking-widest uppercase"
+            >
+              Administrador
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
