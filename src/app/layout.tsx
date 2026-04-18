@@ -54,9 +54,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/og-image1.jpg",
-        width: 1175,
-        height: 625,
+        url: "/images/wpp-image.jpg",
+        width: 1100,
+        height: 569,
         alt: "Videsol — Concesionaria oficial",
       },
     ],
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     title: "Videsol — Automotora | Colonia del Sacramento",
     description:
       "Tu automotora de confianza en Colonia del Sacramento. BYD, Nissan, Citroën, Peugeot, Riddara, Renault y Subaru.",
-    images: ["/images/og-image1.jpg"],
+    images: ["/images/wpp-image.jpg"],
   },
 };
 
