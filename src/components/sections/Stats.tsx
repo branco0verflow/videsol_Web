@@ -11,7 +11,7 @@ const stats = [
   { value: 45,     suffix: "+",  label: "Años de experiencia",  large: false },
   { value: 100000, suffix: "+",  label: "Autos vendidos",        large: true  },
   { value: 7,      suffix: "",   label: "Marcas oficiales",      large: false },
-  { value: 100,    suffix: "%",  label: "Garantía respaldada",   large: false },
+  { value: 200,    suffix: "+",  label: "Unidades en stock",   large: false },
 ];
 
 function formatDisplay(val: number, large: boolean): string {

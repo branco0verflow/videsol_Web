@@ -6,6 +6,7 @@ import FeaturedVehicles from "@/components/sections/FeaturedVehicles";
 import Brands from "@/components/sections/Brands";
 import AboutUs from "@/components/sections/AboutUs";
 import Contact from "@/components/sections/Contact";
+import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 export default function Home() {
   return (
@@ -17,9 +18,10 @@ export default function Home() {
         <FeaturedVehicles />
         <Brands />
         <AboutUs />
-<Contact />
+        <Contact />
       </main>
       <Footer />
+      <WhatsAppFloat />
     </>
   );
 }
