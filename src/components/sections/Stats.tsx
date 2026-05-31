@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const stats = [
-  { value: 45,     suffix: "+",  label: "Años de experiencia",  large: false },
+  { value: 50,     suffix: "+",  label: "Años de experiencia",  large: false },
   { value: 100000, suffix: "+",  label: "Autos vendidos",        large: true  },
   { value: 7,      suffix: "",   label: "Marcas oficiales",      large: false },
   { value: 200,    suffix: "+",  label: "Unidades en stock",   large: false },
@@ -66,17 +66,17 @@ export default function Stats() {
   );
 
   return (
-    <section ref={sectionRef} className="bg-white border-b border-border py-8 lg:py-10">
+    <section ref={sectionRef} className="bg-white border-b border-border py-4 lg:py-5">
       <div className="max-w-5xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-border">
           {stats.map((s) => (
-            <div key={s.label} className="stat-item flex flex-col items-center gap-1.5 px-8 py-4">
+            <div key={s.label} className="stat-item flex flex-col items-center gap-1 px-8 py-2">
 
               {/* Number */}
               <div className="flex items-baseline gap-0.5">
                 <span
                   className="stat-number font-extrabold text-slate-800 tabular-nums leading-none tracking-tight"
-                  style={{ fontSize: "clamp(2rem, 3.5vw, 2.8rem)", fontFamily: "var(--font-outfit)" }}
+                  style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.2rem)", fontFamily: "var(--font-outfit)" }}
                   data-target={s.value}
                   data-large={s.large}
                 >
@@ -84,14 +84,14 @@ export default function Stats() {
                 </span>
                 <span
                   className="font-extrabold text-crimson leading-none tracking-tight"
-                  style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)", fontFamily: "var(--font-outfit)" }}
+                  style={{ fontSize: "clamp(0.9rem, 1.6vw, 1.25rem)", fontFamily: "var(--font-outfit)" }}
                 >
                   {s.suffix}
                 </span>
               </div>
 
               {/* Label */}
-              <p className="text-[11px] text-slate-400 tracking-[0.18em] uppercase font-medium text-center leading-snug">
+              <p className="text-[10px] text-slate-400 tracking-[0.15em] uppercase font-medium text-center leading-snug">
                 {s.label}
               </p>
             </div>

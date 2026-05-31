@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "vehiculos-okm-imagenes-192292427991-us-east-1-an.s3.us-east-1.amazonaws.com",
+      },
     ],
   },
 };

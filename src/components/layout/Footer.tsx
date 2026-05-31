@@ -1,37 +1,15 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { brandToSlug } from "@/lib/brands";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const footerLinks = [
-  {
-    title: "Catálogo",
-    links: [
-      { label: "Autos 0 km",   href: "#vehiculos" },
-      { label: "Autos Usados", href: "#vehiculos" },
-      { label: "BYD",          href: "#marcas"    },
-      { label: "Nissan",       href: "#marcas"    },
-      { label: "Peugeot",      href: "#marcas"    },
-    ],
-  },
-  {
-    title: "Empresa",
-    links: [
-      { label: "Sobre Nosotros",    href: "#nosotros"  },
-      { label: "Servicio Mecánico", href: "#servicios" },
-      { label: "Contacto",          href: "#contacto"  },
-    ],
-  },
-  {
-    title: "Marcas",
-    links: [
-      { label: "Citroën", href: "#marcas" },
-      { label: "Renault", href: "#marcas" },
-      { label: "Riddara", href: "#marcas" },
-      { label: "Subaru",  href: "#marcas" },
-    ],
-  },
+const BRANDS = [
+  "BYD", "Nissan", "Citroën", "Peugeot", "Riddara", "Renault", "Subaru",
 ];
 
 const socialLinks = [
@@ -57,19 +35,43 @@ const socialLinks = [
   },
 ];
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function smoothScrollTo(id: string) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function Footer() {
+  const router   = useRouter();
+  const pathname = usePathname();
+
+  /** Navega a una sección del home con scroll suave */
+  const handleHashNav = (hash: string) => {
+    if (pathname === "/") {
+      setTimeout(() => smoothScrollTo(hash), 80);
+    } else {
+      router.push(`/#${hash}`);
+    }
+  };
+
+  const linkCls =
+    "text-[13px] text-white/40 hover:text-white/80 transition-colors duration-150 text-left";
+  const headingCls =
+    "text-[10px] font-semibold tracking-[2.5px] uppercase text-white/20 mb-5";
+
   return (
     <footer className="bg-[#080c10] text-white">
 
       {/* ── Main content ── */}
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-16 pb-10">
 
-        {/* Top grid */}
+        {/* Top grid: Brand | Catálogo | Empresa | Marcas */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-12 mb-14">
 
-          {/* Brand */}
+          {/* ── Brand column ── */}
           <div className="col-span-2 sm:col-span-1 flex flex-col gap-6">
             <Link href="/" className="inline-block">
               <Image
@@ -124,26 +126,62 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {footerLinks.map((col) => (
-            <div key={col.title}>
-              <p className="text-[10px] font-semibold tracking-[2.5px] uppercase text-white/20 mb-5">
-                {col.title}
-              </p>
-              <ul className="flex flex-col gap-3">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <Link
-                      href={l.href}
-                      className="text-[13px] text-white/40 hover:text-white/80 transition-colors duration-150"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* ── Catálogo ── */}
+          <div>
+            <p className={headingCls}>Catálogo</p>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <button suppressHydrationWarning onClick={() => handleHashNav("okm")} className={linkCls}>
+                  Autos 0 km
+                </button>
+              </li>
+              <li>
+                <button suppressHydrationWarning onClick={() => handleHashNav("usados")} className={linkCls}>
+                  Autos Usados
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* ── Empresa ── */}
+          <div>
+            <p className={headingCls}>Empresa</p>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <button suppressHydrationWarning onClick={() => handleHashNav("nosotros")} className={linkCls}>
+                  Sobre Nosotros
+                </button>
+              </li>
+              <li>
+                <Link href="/taller" className={linkCls}>
+                  Taller Mecánico
+                </Link>
+              </li>
+              <li>
+                <button suppressHydrationWarning onClick={() => handleHashNav("contacto")} className={linkCls}>
+                  Contacto
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* ── Marcas ── */}
+          <div>
+            <p className={headingCls}>Marcas</p>
+            <ul className="flex flex-col gap-3">
+              {BRANDS.map((brand) => (
+                <li key={brand}>
+                  <Link
+                    href={`/marcas/${brandToSlug(brand)}`}
+                    className={linkCls}
+                  >
+                    {brand}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
         </div>
 
         {/* ── Bottom bar ── */}
@@ -152,7 +190,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Videsol. Todos los derechos reservados.
           </p>
 
-          {/* Social inline (mobile) — repeat for visibility at bottom on small screens */}
+          {/* Social inline (mobile) */}
           <div className="flex items-center gap-4 order-1 sm:order-2 sm:hidden">
             {socialLinks.map((s) => (
               <a
@@ -166,9 +204,8 @@ export default function Footer() {
               </a>
             ))}
           </div>
-
-          
         </div>
+
       </div>
     </footer>
   );

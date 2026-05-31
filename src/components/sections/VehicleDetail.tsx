@@ -5,39 +5,26 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { gsap } from 'gsap'
 import ContactModal from '@/components/ui/ContactModal'
-import type { VehicleData, ColorOption } from '@/types/vehicle'
-
-export type { VehicleData, ColorOption }
+import type { VehicleDetailAPI, ColorDetailAPI } from '@/types/vehicle'
 
 interface VehicleDetailProps {
-  vehicle: VehicleData
+  vehicle: VehicleDetailAPI
 }
 
-// ─── Equipamiento estático por categoría ─────────────────────────────────────
+// ─── Tabs de equipamiento ─────────────────────────────────────────────────────
 
-const EQUIPAMIENTO = [
+const EQUIP_TABS = [
   {
-    id: 'seguridad',
+    id: 'seguridad' as const,
     label: 'Seguridad',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
-    items: [
-      'Airbag conductor',
-      'Airbag pasajero',
-      'Airbag de cortina',
-      'Frenos ABS',
-      'Control de tracción',
-      'Control de estabilidad',
-      'Asistencia de arranque en pendiente',
-      'Faros antinieblas delanteros',
-      'Sistema Isofix',
-    ],
   },
   {
-    id: 'confort',
+    id: 'confort' as const,
     label: 'Confort',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -45,21 +32,9 @@ const EQUIPAMIENTO = [
         <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
     ),
-    items: [
-      'Climatizador automático',
-      'Apertura sin llave Keyless',
-      'Cristales eléctricos',
-      'Espejos eléctricos',
-      'Volante multifunción',
-      'Cámara de retroceso',
-      'Sensor de estacionamiento',
-      'Control de velocidad crucero',
-      'Regulación de altura del volante',
-      'Computadora de abordo',
-    ],
   },
   {
-    id: 'entretenimiento',
+    id: 'multimedia' as const,
     label: 'Multimedia',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -68,23 +43,12 @@ const EQUIPAMIENTO = [
         <line x1="12" y1="17" x2="12" y2="21" />
       </svg>
     ),
-    items: [
-      'Pantalla multimedia',
-      'Android Auto',
-      'Apple CarPlay',
-      'Radio AM/FM',
-      'Bluetooth',
-      'Entrada USB',
-      'Comando satelital de stereo',
-    ],
   },
 ]
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+type EquipTabId = typeof EQUIP_TABS[number]['id']
 
-function formatKm(km: number) {
-  return km === 0 ? '0 km' : `${km.toLocaleString('es-UY')} km`
-}
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatPrice(price: number) {
   return price.toLocaleString('en-US')
@@ -93,26 +57,29 @@ function formatPrice(price: number) {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
-  const defaultColor = vehicle.colores?.find(c => c.nombre === vehicle.colorSeleccionado)
-                    ?? vehicle.colores?.[0]
-                    ?? null
+  const defaultColor = vehicle.colores?.[0] ?? null
 
-  const [activeIdx, setActiveIdx]         = useState(0)
+  const [activeIdx,     setActiveIdx]     = useState(0)
   const [transitioning, setTransitioning] = useState(false)
-  const [paused, setPaused]               = useState(false)
-  const [activeTab, setActiveTab]         = useState('seguridad')
-  const [modalOpen, setModalOpen]         = useState(false)
-  const [selectedColor, setSelectedColor] = useState<ColorOption | null>(defaultColor)
+  const [paused,        setPaused]        = useState(false)
+  const [activeTab,     setActiveTab]     = useState<EquipTabId>('seguridad')
+  const [modalOpen,     setModalOpen]     = useState(false)
+  const [selectedColor, setSelectedColor] = useState<ColorDetailAPI | null>(defaultColor)
 
-  const mainImgRef  = useRef<HTMLDivElement>(null)
-  const galleryRef  = useRef<HTMLDivElement>(null)
-  const infoRef     = useRef<HTMLDivElement>(null)
-  const timerRef    = useRef<ReturnType<typeof setInterval> | null>(null)
+  const mainImgRef = useRef<HTMLDivElement>(null)
+  const galleryRef = useRef<HTMLDivElement>(null)
+  const infoRef    = useRef<HTMLDivElement>(null)
+  const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const activeImages = selectedColor?.imagenes ?? vehicle.imagenes
-  const total        = activeImages.length
+  const activeImages = (selectedColor?.imagenes ?? [])
+    .slice()
+    .sort((a, b) => a.orden - b.orden)
+    .map((img) => img.url)
+  const total = activeImages.length
 
-  const handleColorChange = (color: ColorOption) => {
+  const isNew = vehicle.tipoNegocio?.toLowerCase().includes('0 km') ?? false
+
+  const handleColorChange = (color: ColorDetailAPI) => {
     if (color.nombre === selectedColor?.nombre) return
     setSelectedColor(color)
     setActiveIdx(0)
@@ -150,28 +117,22 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
     return () => { if (timerRef.current) clearInterval(timerRef.current) }
   }, [total, paused])
 
-  const handleThumbClick = (idx: number) => {
-    setPaused(true)
-    goTo(idx)
-  }
-
+  const handleThumbClick = (idx: number) => { setPaused(true); goTo(idx) }
   const goPrev = () => { setPaused(true); goTo(Math.max(0, activeIdx - 1)) }
   const goNext = () => { setPaused(true); goTo(Math.min(total - 1, activeIdx + 1)) }
 
-  const isNew = vehicle.km === 0
-
   const specs = [
-    { label: 'Combustible', value: vehicle.combustible  },
-    { label: 'Transmisión', value: vehicle.transmision  },
-    { label: 'Cilindrada',  value: vehicle.cilindrada   },
-    { label: 'Potencia',    value: vehicle.potencia     },
-    { label: 'Puertas',     value: String(vehicle.puertas) },
-    { label: 'Dirección',   value: vehicle.direccion    },
-    { label: 'Color',       value: vehicle.color        },
-    { label: 'Tipo',        value: vehicle.tipo         },
+    { label: 'Combustible', value: vehicle.combustible              },
+    { label: 'Transmisión', value: vehicle.transmision              },
+    { label: 'Cilindrada',  value: vehicle.cilindrada               },
+    { label: 'Potencia',    value: vehicle.potencia                 },
+    { label: 'Puertas',     value: String(vehicle.puertas)          },
+    { label: 'Dirección',   value: vehicle.direccion                },
+    { label: 'Color',       value: selectedColor?.nombre ?? null    },
+    { label: 'Tipo',        value: vehicle.tipo                     },
   ].filter((s) => s.value != null && s.value !== '') as { label: string; value: string }[]
 
-  const tabActivo = EQUIPAMIENTO.find((e) => e.id === activeTab)
+  const tabItems = vehicle.caracteristicas?.[activeTab] ?? []
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
@@ -198,11 +159,11 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
               {/* Main image */}
               <div
                 ref={galleryRef}
-                className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/3]"
+                className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-4/3"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
               >
-                {activeImages.map((src, i) => (
+                {total > 0 ? activeImages.map((src, i) => (
                   <div
                     key={i}
                     className="absolute inset-0 transition-opacity duration-350 ease-in-out"
@@ -217,7 +178,11 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                       priority={i === 0}
                     />
                   </div>
-                ))}
+                )) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <PlaceholderCar />
+                  </div>
+                )}
 
                 {/* Badge */}
                 <div className="absolute top-4 left-4 z-10">
@@ -253,8 +218,8 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                 {/* Arrows */}
                 {total > 1 && (
                   <>
-                    <ArrowBtn direction="left"  onClick={goPrev} disabled={activeIdx === 0}           className="absolute left-3  top-1/2 -translate-y-1/2 z-10" />
-                    <ArrowBtn direction="right" onClick={goNext} disabled={activeIdx === total - 1}    className="absolute right-3 top-1/2 -translate-y-1/2 z-10" />
+                    <ArrowBtn direction="left"  onClick={goPrev} disabled={activeIdx === 0}         className="absolute left-3  top-1/2 -translate-y-1/2 z-10" />
+                    <ArrowBtn direction="right" onClick={goNext} disabled={activeIdx === total - 1}  className="absolute right-3 top-1/2 -translate-y-1/2 z-10" />
                   </>
                 )}
 
@@ -270,36 +235,40 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                 )}
 
                 {/* Dots */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
-                  {activeImages.map((_, i) => (
-                    <button
-                      key={i}
-                      aria-label='imagen'
-                      onClick={() => handleThumbClick(i)}
-                      className={`rounded-full transition-all duration-200 ${
-                        i === activeIdx ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/75'
-                      }`}
-                    />
-                  ))}
-                </div>
+                {total > 1 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+                    {activeImages.map((_, i) => (
+                      <button
+                        key={i}
+                        aria-label="imagen"
+                        onClick={() => handleThumbClick(i)}
+                        className={`rounded-full transition-all duration-200 ${
+                          i === activeIdx ? 'w-5 h-1.5 bg-white' : 'w-1.5 h-1.5 bg-white/50 hover:bg-white/75'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Thumbnails */}
-              <div className="flex gap-2.5 mt-3 overflow-x-auto pb-1">
-                {activeImages.map((src, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleThumbClick(i)}
-                    className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      i === activeIdx
-                        ? 'border-[#1e3a5f] shadow-sm scale-105'
-                        : 'border-transparent opacity-60 hover:opacity-100 hover:border-slate-300'
-                    }`}
-                  >
-                    <Image src={src} alt={`Vista ${i + 1}`} fill sizes="64px" className="object-cover" />
-                  </button>
-                ))}
-              </div>
+              {total > 1 && (
+                <div className="flex gap-2.5 mt-3 overflow-x-auto pb-1">
+                  {activeImages.map((src, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleThumbClick(i)}
+                      className={`relative shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                        i === activeIdx
+                          ? 'border-[#1e3a5f] shadow-sm scale-105'
+                          : 'border-transparent opacity-60 hover:opacity-100 hover:border-slate-300'
+                      }`}
+                    >
+                      <Image src={src} alt={`Vista ${i + 1}`} fill sizes="64px" className="object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* ── Equipamiento ── */}
@@ -307,7 +276,7 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
 
               {/* Tabs */}
               <div className="flex border-b border-slate-100">
-                {EQUIPAMIENTO.map((cat) => (
+                {EQUIP_TABS.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setActiveTab(cat.id)}
@@ -325,19 +294,21 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                 ))}
               </div>
 
-              {/* Items grid */}
-              {tabActivo && (
-                <div className="p-5">
+              {/* Items */}
+              <div className="p-5">
+                {tabItems.length > 0 ? (
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
-                    {tabActivo.items.map((item) => (
+                    {tabItems.map((item) => (
                       <li key={item} className="flex items-center gap-2.5 text-[13px] text-slate-600">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#1e3a5f]/40 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#1e3a5f]/40 shrink-0" />
                         {item}
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
+                ) : (
+                  <p className="text-[13px] text-slate-400">Sin información disponible.</p>
+                )}
+              </div>
             </div>
 
           </div>
@@ -359,8 +330,8 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                 </p>
                 <div className="flex items-center gap-2 flex-wrap">
                   <Badge>{vehicle.anio}</Badge>
-                  <Badge>{formatKm(vehicle.km)}</Badge>
-                  <Badge>{vehicle.tipo}</Badge>
+                  <Badge>{vehicle.tipoNegocio}</Badge>
+                  {vehicle.tipo && <Badge>{vehicle.tipo}</Badge>}
                 </div>
                 <div className="mt-5">
                   <span className="text-[32px] font-semibold text-slate-900 leading-none">
@@ -370,8 +341,8 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                 </div>
               </div>
 
-              {/* ── Color selector (solo 0km con colores) ── */}
-              {isNew && vehicle.colores && vehicle.colores.length > 1 && (
+              {/* ── Color selector ── */}
+              {vehicle.colores && vehicle.colores.length > 1 && (
                 <div className="px-7 py-5 border-b border-slate-100">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-[10px] font-semibold tracking-[2px] text-slate-400 uppercase">
@@ -397,7 +368,7 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                           }`}
                         >
                           <Image
-                            src={color.swatch}
+                            src={color.swatchUrl}
                             alt={color.nombre}
                             fill
                             sizes="56px"
@@ -471,9 +442,9 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
                     <span>Ver financiación</span>
                   </a>
                 )}
-                {vehicle.catalogo && (
+                {vehicle.catalogoPdfUrl && (
                   <a
-                    href={vehicle.catalogo}
+                    href={vehicle.catalogoPdfUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 border border-slate-200 hover:border-[#1e3a5f] text-slate-700 hover:text-[#1e3a5f] text-[13px] font-medium py-3 rounded-xl transition-all duration-200"
@@ -494,9 +465,10 @@ export default function VehicleDetail({ vehicle }: VehicleDetailProps) {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         vehiculo={`${vehicle.marca} ${vehicle.modelo} ${vehicle.version}`}
+        vehiculoId={vehicle.id}
+        vehiculoTipo="okm"
       />
 
-      {/* CSS para la barra de progreso */}
       <style jsx global>{`
         @keyframes progress {
           from { width: 0% }
@@ -542,6 +514,20 @@ function CatalogoIcon() {
       <line x1="16" y1="13" x2="8" y2="13" />
       <line x1="16" y1="17" x2="8" y2="17" />
       <polyline points="10 9 9 9 8 9" />
+    </svg>
+  )
+}
+
+function PlaceholderCar() {
+  return (
+    <svg width="200" height="90" viewBox="0 0 230 100" fill="none" opacity={0.12}>
+      <rect x="15" y="50" width="200" height="28" rx="8" fill="#0f172a" />
+      <rect x="52" y="24" width="118" height="30" rx="12" fill="#0f172a" />
+      <circle cx="64" cy="81" r="15" stroke="#0f172a" strokeWidth="2.5" fill="none" />
+      <circle cx="64" cy="81" r="5" fill="#0f172a" />
+      <circle cx="166" cy="81" r="15" stroke="#0f172a" strokeWidth="2.5" fill="none" />
+      <circle cx="166" cy="81" r="5" fill="#0f172a" />
+      <rect x="178" y="54" width="26" height="12" rx="4" fill="#0f172a" opacity={0.4} />
     </svg>
   )
 }

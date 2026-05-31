@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronDown, X, Menu } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 import { brandToSlug } from "@/lib/brands";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -20,10 +21,6 @@ const brands = [
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function dispatchCatalogo(catalogo: "okm" | "usados") {
-  window.dispatchEvent(new CustomEvent("videsol:set-catalogo", { detail: { catalogo } }));
-}
-
 function smoothScrollTo(id: string) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -32,6 +29,9 @@ function smoothScrollTo(id: string) {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Navbar() {
+  const router   = useRouter();
+  const pathname = usePathname();
+
   const [scrolled,       setScrolled]       = useState(false);
   const [mobileOpen,     setMobileOpen]     = useState(false);
   const [dropdownOpen,   setDropdownOpen]   = useState<string | null>(null);
@@ -61,23 +61,17 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // ── Sync when sidebar changes catalog ──
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const { catalogo } = (e as CustomEvent<{ catalogo: "okm" | "usados" }>).detail;
-      setActiveCatalogo(catalogo);
-    };
-    window.addEventListener("videsol:catalogo-changed", handler);
-    return () => window.removeEventListener("videsol:catalogo-changed", handler);
-  }, []);
 
   const closeMobile = () => setMobileOpen(false);
 
   const handleCatalogo = (catalogo: "okm" | "usados") => {
     closeMobile();
     setActiveCatalogo(catalogo);
-    dispatchCatalogo(catalogo);
-    setTimeout(() => smoothScrollTo("vehiculos"), 80);
+    if (pathname === "/") {
+      setTimeout(() => smoothScrollTo(catalogo), 80);
+    } else {
+      router.push(`/#${catalogo}`);
+    }
   };
 
   return (

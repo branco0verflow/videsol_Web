@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,6 +26,17 @@ export default function Contact() {
     },
     { scope: sectionRef }
   );
+
+  // ── Scroll to section when arriving via /#contacto hash ─────────────────
+  useEffect(() => {
+    if (window.location.hash === '#contacto') {
+      const timer = setTimeout(() => {
+        const el = document.getElementById('contacto')
+        if (el) el.scrollIntoView({ behavior: 'smooth' })
+      }, 350)
+      return () => clearTimeout(timer)
+    }
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

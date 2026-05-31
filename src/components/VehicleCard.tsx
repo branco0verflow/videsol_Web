@@ -5,14 +5,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 
-import type { VehicleData } from '@/types/vehicle'
+import type { VehicleAPI } from '@/types/vehicle'
 
-// VehicleCard uses VehicleData as its Vehicle type
-export type Vehicle = VehicleData
+export type Vehicle = VehicleAPI
 
 interface VehicleCardProps {
   vehicle:         Vehicle
   animationDelay?: number
+  catalogo?:       'okm' | 'usados'
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -27,9 +27,10 @@ function formatPrice(price: number): string {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
-export default function VehicleCard({ vehicle, animationDelay = 0 }: VehicleCardProps) {
+export default function VehicleCard({ vehicle, animationDelay = 0, catalogo = 'okm' }: VehicleCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
-  const isNew   = vehicle.km === 0
+  const isNew   = vehicle.tipoNegocio?.toLowerCase().includes('0 km') ?? false
+  const kmValue = vehicle.km != null ? formatKm(vehicle.km) : (isNew ? '0 km' : '—')
 
   useEffect(() => {
     if (!cardRef.current) return
@@ -56,14 +57,14 @@ export default function VehicleCard({ vehicle, animationDelay = 0 }: VehicleCard
       onMouseLeave={handleMouseLeave}
       className="opacity-0"
     >
-      <Link href={`/vehiculos/${vehicle.id}`} className="block">
+      <Link href={`/vehiculos/${catalogo}/${vehicle.id}`} className="block">
         <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.08)]">
 
           {/* Image */}
           <div className="relative bg-slate-50 h-32 sm:h-48 overflow-hidden">
-            {vehicle.prin ? (
+            {vehicle.imagenPrincipalUrl ? (
               <Image
-                src={vehicle.prin}
+                src={vehicle.imagenPrincipalUrl}
                 alt={`${vehicle.marca} ${vehicle.modelo}`}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -108,9 +109,9 @@ export default function VehicleCard({ vehicle, animationDelay = 0 }: VehicleCard
 
             {/* Specs — en mobile solo Año y Km */}
             <div className="flex items-stretch mb-2 sm:mb-5">
-              <SpecItem label="Año" value={String(vehicle.anio)} />
+              <SpecItem label="Año"  value={String(vehicle.anio)} />
               <SpecDivider />
-              <SpecItem label="Km"  value={formatKm(vehicle.km)} />
+              <SpecItem label="Km"   value={kmValue} />
               <span className="hidden sm:contents">
                 <SpecDivider />
                 <SpecItem label="Comb." value={vehicle.combustible ?? '—'} />

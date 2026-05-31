@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { BRAND_MAP } from '@/lib/brands'
-import vehiculos from '../../../../db/vehiculos'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import BrandPage from '@/components/sections/BrandPage'
@@ -27,16 +26,11 @@ export default async function MarcaPage({ params }: Props) {
   const brand = BRAND_MAP[marca]
   if (!brand) notFound()
 
-  const ALL = [...vehiculos.okm, ...vehiculos.usados]
-  const vehicles = ALL.filter(
-    (v) => v.marca.toLowerCase() === brand.name.toLowerCase()
-  )
-
   return (
     <>
       <Navbar />
       <main>
-        <BrandPage brand={brand} vehicles={vehicles} />
+        <BrandPage brand={brand} />
       </main>
       <Footer />
     </>
