@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import CargarVehiculoForm from './CargarVehiculoForm'
 import ToastListo from './ToastListo'
+import { API as API_BASE } from '@/lib/config'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
