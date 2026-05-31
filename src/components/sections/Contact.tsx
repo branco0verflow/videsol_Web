@@ -17,10 +17,12 @@ export default function Contact() {
     () => {
       gsap.from(".contact-left", {
         opacity: 0, x: -50, duration: 0.9, ease: "power3.out",
+        immediateRender: false,
         scrollTrigger: { trigger: ".contact-left", start: "top 82%", once: true },
       });
       gsap.from(".contact-right", {
         opacity: 0, x: 50, duration: 0.9, ease: "power3.out",
+        immediateRender: false,
         scrollTrigger: { trigger: ".contact-right", start: "top 82%", once: true },
       });
     },

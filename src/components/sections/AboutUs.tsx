@@ -134,7 +134,6 @@ function BeforeAfterSlider() {
         src="/images/local2.png"
         alt="Videsol de noche"
         fill
-        priority
         sizes="(max-width: 1024px) 100vw, 50vw"
         className="object-cover"
         draggable={false}
@@ -213,14 +212,17 @@ export default function AboutUs() {
     () => {
       gsap.from(".about-badge, .about-heading, .about-body, .about-stats", {
         opacity: 0, y: 28, duration: 0.8, stagger: 0.1, ease: "power3.out",
+        immediateRender: false,
         scrollTrigger: { trigger: ".about-badge", start: "top 82%", once: true },
       });
       gsap.from(".about-image-col", {
         opacity: 0, x: 50, duration: 1, ease: "power3.out",
+        immediateRender: false,
         scrollTrigger: { trigger: ".about-image-col", start: "top 80%", once: true },
       });
       gsap.from(".value-pill", {
         opacity: 0, x: -16, stagger: 0.08, duration: 0.5, ease: "power3.out",
+        immediateRender: false,
         scrollTrigger: { trigger: ".value-pill", start: "top 90%", once: true },
       });
     },

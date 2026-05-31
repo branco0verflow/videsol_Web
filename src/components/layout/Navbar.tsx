@@ -64,6 +64,15 @@ export default function Navbar() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  const handleHashNav = (hash: string) => {
+    closeMobile();
+    if (pathname === '/') {
+      setTimeout(() => smoothScrollTo(hash), 80);
+    } else {
+      router.push(`/#${hash}`);
+    }
+  };
+
   const handleCatalogo = (catalogo: "okm" | "usados") => {
     closeMobile();
     setActiveCatalogo(catalogo);
@@ -235,7 +244,7 @@ export default function Navbar() {
         {/* Links */}
         <div className="flex flex-col overflow-y-auto flex-1 px-6 py-6 gap-1">
 
-          <MobileLink href="#inicio" onClick={closeMobile} num="01">Inicio</MobileLink>
+          <MobileLink href="/" onClick={closeMobile} num="01">Inicio</MobileLink>
 
           {/* Vehículos section */}
           <div className="pt-2 pb-1">
@@ -277,9 +286,9 @@ export default function Navbar() {
 
           <div className="h-px bg-white/10 my-2" />
 
-          <MobileLink href="#servicios" onClick={closeMobile} num="04">Taller mecánico</MobileLink>
-          <MobileLink href="#nosotros"  onClick={closeMobile} num="05">Sobre nosotros</MobileLink>
-          <MobileLink href="#contacto"  onClick={closeMobile} num="06">Contacto</MobileLink>
+          <MobileLink href="/taller"                          onClick={closeMobile}                     num="04">Taller mecánico</MobileLink>
+          <MobileLink onNavigate={() => handleHashNav("nosotros")} num="05">Sobre nosotros</MobileLink>
+          <MobileLink onNavigate={() => handleHashNav("contacto")} num="06">Contacto</MobileLink>
         </div>
 
         {/* CTA */}
@@ -372,20 +381,16 @@ function DropdownPanel({
 }
 
 function MobileLink({
-  href, onClick, num, children,
+  href, onClick, onNavigate, num, children,
 }: {
-  href: string; onClick: () => void; num: string; children: React.ReactNode;
+  href?: string; onClick?: () => void; onNavigate?: () => void; num: string; children: React.ReactNode;
 }) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className="flex items-center justify-between px-4 py-3.5 rounded-xl hover:bg-white/5 text-white font-semibold text-[15px] transition-colors"
-    >
-      {children}
-      <span className="text-[11px] text-white/30 tracking-widest font-normal">{num}</span>
-    </Link>
-  );
+  const cls = "flex items-center justify-between px-4 py-3.5 rounded-xl hover:bg-white/5 text-white font-semibold text-[15px] transition-colors w-full text-left";
+  const inner = <><span>{children}</span><span className="text-[11px] text-white/30 tracking-widest font-normal">{num}</span></>;
+  if (onNavigate) {
+    return <button onClick={onNavigate} suppressHydrationWarning className={cls}>{inner}</button>;
+  }
+  return <Link href={href!} onClick={onClick} className={cls}>{inner}</Link>;
 }
 
 function WhatsAppIcon() {
