@@ -22,7 +22,7 @@ export default function Hero() {
   const sectionRef  = useRef<HTMLElement>(null);
   const phraseRef   = useRef<HTMLDivElement>(null);
   const dotRef      = useRef<HTMLDivElement>(null);
-  const [index, setIndex]           = useState(0);
+  const [index, setIndex]             = useState(0);
   const [videoFailed, setVideoFailed] = useState(false);
 
   // ── Entrance animation ───────────────────────────────────────────────────
@@ -84,10 +84,10 @@ export default function Hero() {
       /* 1920×520 ratio, with a mobile floor so content stays readable */
       className="relative w-full overflow-hidden bg-navy-dark min-h-[280px] sm:min-h-0 sm:aspect-[1920/520]"
     >
-      {/* ── Video / fallback ──────────────────────────────────────────── */}
+      {/* ── Video ─────────────────────────────────────────────────────── */}
       {videoFailed ? (
         <Image
-          src="/videos/poster-hero.jpg"
+          src="/images/hero-fallback.jpg"
           alt=""
           fill
           className="object-cover"
@@ -101,10 +101,9 @@ export default function Hero() {
           loop
           playsInline
           preload="auto"
-          poster="/videos/poster-hero.jpg"
           onError={() => setVideoFailed(true)}
         >
-          <source src="/videos/inicio_web.mp4" type="video/mp4" />
+          <source src="/videos/inicio.mp4" type="video/mp4" />
         </video>
       )}
 
