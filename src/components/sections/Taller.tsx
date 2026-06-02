@@ -39,7 +39,6 @@ const heroStats = [
   { value: "+50", label: "Años de trayectoria" },
   { value: "07", label: "Marcas oficiales" },
   { value: "100%", label: "Repuestos originales" },
-  { value: "24h", label: "Respuesta de agenda" },
 ];
 
 // WhatsApp link — agendar turno
@@ -134,7 +133,7 @@ export default function Taller() {
 
         {/* ── Cinematic video block ───────────────────────────────────── */}
         <div className="srv-video relative">
-          <div className="relative aspect-[21/9] rounded-[2rem] overflow-hidden ring-1 ring-black/5 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
+          <div className="relative aspect-4/3 sm:aspect-video lg:aspect-21/9 rounded-xl sm:rounded-4xl overflow-hidden ring-1 ring-black/5 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
             <video
               className="absolute inset-0 w-full h-full object-cover"
               src="/videos/taller.mp4"
@@ -149,15 +148,8 @@ export default function Taller() {
             <div className="absolute inset-0 bg-gradient-to-tr from-black/85 via-black/40 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-            {/* Top row: badge + play indicator */}
-            <div className="absolute top-6 lg:top-8 left-6 lg:left-10 right-6 lg:right-10 flex items-start justify-between">
-              <span className="inline-flex items-center gap-2 bg-crimson/95 backdrop-blur text-white text-[11px] font-bold tracking-[0.22em] uppercase px-3.5 py-2 rounded-full">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-60 animate-ping" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white" />
-                </span>
-                En vivo
-              </span>
+            {/* Top row: play indicator */}
+            <div className="absolute top-6 lg:top-8 right-6 lg:right-10 flex justify-end">
               <span className="hidden sm:inline-flex items-center gap-2 text-white/70 text-xs font-medium tracking-[0.2em] uppercase">
                 <PlayCircle size={14} />
                 Recorrido
@@ -179,16 +171,16 @@ export default function Taller() {
 
           {/* ── Floating stat strip ─────────────────────────────────── */}
           <div className="srv-stats relative -mt-10 lg:-mt-12 mx-4 lg:mx-12">
-            <div className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] ring-1 ring-black/5 grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+            <div className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] ring-1 ring-black/5 grid grid-cols-3 divide-x divide-slate-100">
               {heroStats.map((s) => (
                 <div
                   key={s.label}
-                  className="srv-stat px-6 py-5 lg:py-6 flex flex-col items-start"
+                  className="srv-stat px-3 sm:px-6 py-4 lg:py-6 flex flex-col items-start"
                 >
-                  <span className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
+                  <span className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
                     {s.value}
                   </span>
-                  <span className="mt-1 text-[11px] lg:text-xs font-bold tracking-[0.18em] uppercase text-slate-500">
+                  <span className="mt-1 text-[9px] sm:text-[11px] lg:text-xs font-bold tracking-[0.12em] sm:tracking-[0.18em] uppercase text-slate-500">
                     {s.label}
                   </span>
                 </div>

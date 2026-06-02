@@ -11,6 +11,9 @@ export const BRAND_MAP: Record<string, BrandInfo> = {
   riddara: { name: 'Riddara', image: '/images/seccion/riddara.png' },
   renault: { name: 'Renault', image: '/images/seccion/renault.png' },
   subaru:  { name: 'Subaru',  image: '/images/seccion/subaru.png' },
+  baic: { name: 'Baic', image: '/images/seccion/baic.png' },
+  voyah: { name: 'Voyah', image: '/images/seccion/voyah.png' },
+  kyc:  { name: 'KYC',  image: '/images/seccion/kyc.png' },
 }
 
 /** Convierte el nombre de una marca a su slug URL (ej: "Citroën" → "citroen") */

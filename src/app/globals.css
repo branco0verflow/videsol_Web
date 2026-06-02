@@ -19,6 +19,12 @@
   }
 }
 
+/* GSAP pre-hide: evita el flash en mobile antes de que GSAP tome control */
+.brands-header,
+.brands-ticker-wrap {
+  visibility: hidden;
+}
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;

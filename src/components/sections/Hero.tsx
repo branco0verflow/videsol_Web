@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 gsap.registerPlugin(useGSAP);
 
@@ -18,10 +19,11 @@ const PHRASES = [
 const INTERVAL = 10000;
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const phraseRef  = useRef<HTMLDivElement>(null);
-  const dotRef     = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(0);
+  const sectionRef  = useRef<HTMLElement>(null);
+  const phraseRef   = useRef<HTMLDivElement>(null);
+  const dotRef      = useRef<HTMLDivElement>(null);
+  const [index, setIndex]           = useState(0);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   // ── Entrance animation ───────────────────────────────────────────────────
   useGSAP(
@@ -82,17 +84,29 @@ export default function Hero() {
       /* 1920×520 ratio, with a mobile floor so content stays readable */
       className="relative w-full overflow-hidden bg-navy-dark min-h-[280px] sm:min-h-0 sm:aspect-[1920/520]"
     >
-      {/* ── Video ─────────────────────────────────────────────────────── */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-      >
-        <source src="/videos/inicio.mp4" type="video/mp4" />
-      </video>
+      {/* ── Video / fallback ──────────────────────────────────────────── */}
+      {videoFailed ? (
+        <Image
+          src="/videos/poster-hero.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
+      ) : (
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/videos/poster-hero.jpg"
+          onError={() => setVideoFailed(true)}
+        >
+          <source src="/videos/inicio_web.mp4" type="video/mp4" />
+        </video>
+      )}
 
       {/* ── Overlay: strong left → transparent right ──────────────────── */}
       <div className="hero-overlay absolute inset-0 bg-linear-to-r from-navy-dark/38 via-navy-dark/15 to-transparent" />

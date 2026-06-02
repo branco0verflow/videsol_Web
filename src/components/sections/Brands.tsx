@@ -18,6 +18,9 @@ const brands = [
   { name: 'Riddara', image: '/images/marcas/Marca5.png' },
   { name: 'Renault', image: '/images/marcas/Marca6.png' },
   { name: 'Subaru',  image: '/images/marcas/Marca7.png' },
+  { name: 'Baic', image: '/images/marcas/Marca8.png' },
+  { name: 'Voyah', image: '/images/marcas/Marca9.png' },
+  { name: 'KYC',  image: '/images/marcas/Marca10.png' },
 ]
 
 // Duplicate for seamless loop
@@ -31,11 +34,11 @@ export default function Brands() {
   useGSAP(
     () => {
       gsap.from('.brands-header', {
-        opacity: 0, y: 40, duration: 0.8, ease: 'power3.out',
+        autoAlpha: 0, y: 40, duration: 0.8, ease: 'power3.out',
         scrollTrigger: { trigger: '.brands-header', start: 'top 85%', once: true },
       })
       gsap.from('.brands-ticker-wrap', {
-        opacity: 0, y: 20, duration: 0.7, ease: 'power3.out',
+        autoAlpha: 0, y: 20, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: '.brands-ticker-wrap', start: 'top 88%', once: true },
       })
     },
@@ -61,7 +64,7 @@ export default function Brands() {
             className="text-4xl lg:text-5xl font-bold text-slate-900"
             style={{ fontFamily: 'var(--font-oswald)' }}
           >
-            7 marcas.{' '}
+            10 marcas.{' '}
             <span className="text-gradient">Una sola dirección.</span>
           </h2>
           <p className="text-slate-500 mt-4 max-w-xl mx-auto text-sm leading-relaxed">
@@ -77,7 +80,7 @@ export default function Brands() {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-34 z-10 bg-linear-to-r from-white to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-34 z-10 bg-linear-to-l from-white to-transparent" />
 
-        <div className="flex w-max animate-marquee">
+        <div className="flex w-max animate-marquee will-change-transform">
           {track.map((brand, i) => (
             <div
               key={i}
@@ -89,8 +92,8 @@ export default function Brands() {
                   src={brand.image}
                   alt={brand.name}
                   fill
-                  sizes="130px"
-                  className="object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                  sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 130px"
+                  className="object-contain grayscale hover:grayscale-0 transition-[filter] duration-300"
                   draggable={false}
                 />
               </div>
