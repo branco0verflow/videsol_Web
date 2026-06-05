@@ -17,6 +17,8 @@ const brands = [
   { name: "Riddara" },
   { name: "Renault" },
   { name: "Subaru"  },
+  { name: "Baic"    },
+  { name: "KYC"     }, 
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
