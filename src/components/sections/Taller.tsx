@@ -136,7 +136,7 @@ export default function Taller() {
           <div className="relative aspect-4/3 sm:aspect-video lg:aspect-21/9 rounded-xl sm:rounded-4xl overflow-hidden ring-1 ring-black/5 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
             <video
               className="absolute inset-0 w-full h-full object-cover"
-              src="/videos/taller.mp4"
+              src="/videos/taller1.mp4"
               autoPlay
               muted
               loop

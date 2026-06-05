@@ -18,8 +18,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const stats = [
-  { value: "+45", label: "Años en el mercado" },
-  { value: "7", label: "Marcas oficiales" },
+  { value: "+50", label: "Años en el mercado" },
+  { value: "10", label: "Marcas oficiales" },
   { value: "100%", label: "Garantía de fábrica" },
 ];
 

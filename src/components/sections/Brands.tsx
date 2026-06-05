@@ -19,7 +19,7 @@ const brands = [
   { name: 'Renault', image: '/images/marcas/Marca6.png' },
   { name: 'Subaru',  image: '/images/marcas/Marca7.png' },
   { name: 'Baic', image: '/images/marcas/Marca8.png' },
-  { name: 'Voyah', image: '/images/marcas/Marca9.png' },
+  { name: 'Avantier', image: '/images/marcas/Marca9.png' },
   { name: 'KYC',  image: '/images/marcas/Marca10.png' },
 ]
 

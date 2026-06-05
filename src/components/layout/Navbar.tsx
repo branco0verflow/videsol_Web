@@ -86,7 +86,7 @@ export default function Navbar() {
   return (
     <>
       {/* Spacer para compensar el navbar fixed */}
-      <div className="h-15.5 lg:h-17.5" />
+      <div className="h-16.5 lg:h-19.5" />
 
       {/* ── Navbar ──────────────────────────────────────────────────── */}
       <nav
@@ -100,16 +100,16 @@ export default function Navbar() {
         <div className="h-0.5 w-full bg-crimson" />
 
         <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-10 xl:px-16">
-          <div className="flex items-center justify-between h-15 lg:h-17">
+          <div className="flex items-center justify-between h-16 lg:h-19">
 
             {/* ── Logo ── */}
             <Link href="/" className="shrink-0 mr-6">
               <Image
                 src="/images/logo.png"
                 alt="Videsol"
-                width={130}
-                height={44}
-                className="h-9 w-auto object-contain"
+                width={160}
+                height={54}
+                className="h-11 w-auto object-contain"
                 priority
               />
             </Link>
@@ -139,7 +139,7 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen((p) => p === "marcas" ? null : "marcas")}
-                  className="flex items-center gap-1 px-3.5 py-2 text-[13px] text-slate-600 hover:text-navy font-semibold tracking-wide transition-colors duration-200 whitespace-nowrap"
+                  className="flex items-center gap-1.5 px-4 py-2.5 text-sm text-slate-600 hover:text-navy font-semibold tracking-wide transition-colors duration-200 whitespace-nowrap"
                   suppressHydrationWarning
                 >
                   Marcas
@@ -178,8 +178,8 @@ export default function Navbar() {
                 target="_blank" rel="noopener noreferrer"
                 className="flex flex-col items-end leading-none px-3 py-1.5 rounded-xl hover:bg-slate-50 transition-colors group"
               >
-                <span className="text-[9px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Serv. mecánico</span>
-                <span className="text-[13px] font-bold text-slate-700 group-hover:text-navy transition-colors">092 655 929</span>
+                <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Serv. mecánico</span>
+                <span className="text-sm font-bold text-slate-700 group-hover:text-navy transition-colors">092 655 929</span>
               </a>
               <div className="w-px h-7 bg-slate-200" />
               <a
@@ -187,8 +187,8 @@ export default function Navbar() {
                 target="_blank" rel="noopener noreferrer"
                 className="flex flex-col items-end leading-none px-3 py-1.5 rounded-xl hover:bg-slate-50 transition-colors group"
               >
-                <span className="text-[9px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Automotora</span>
-                <span className="text-[13px] font-bold text-slate-700 group-hover:text-navy transition-colors">097 734 751</span>
+                <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Automotora</span>
+                <span className="text-sm font-bold text-slate-700 group-hover:text-navy transition-colors">097 734 751</span>
               </a>
             </div>
 
@@ -330,10 +330,10 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="relative px-3.5 py-2 text-[13px] text-slate-600 hover:text-navy font-semibold tracking-wide transition-colors duration-200 group whitespace-nowrap"
+      className="relative px-4 py-2.5 text-sm text-slate-600 hover:text-navy font-semibold tracking-wide transition-colors duration-200 group whitespace-nowrap"
     >
       {children}
-      <span className="absolute bottom-1 left-3.5 right-3.5 h-px bg-crimson scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+      <span className="absolute bottom-1 left-4 right-4 h-px bg-crimson scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
     </Link>
   );
 }
@@ -348,7 +348,7 @@ function CatalogoBtn({
     <button
       onClick={onClick}
       suppressHydrationWarning
-      className={`relative px-3.5 py-1.5 text-[13px] font-semibold tracking-wide transition-all duration-200 whitespace-nowrap rounded-full ${
+      className={`relative px-4 py-2 text-sm font-semibold tracking-wide transition-all duration-200 whitespace-nowrap rounded-full ${
         active
           ? "bg-navy text-white"
           : "text-slate-600 hover:text-navy"

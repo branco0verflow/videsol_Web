@@ -9,7 +9,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const stats = [
   { value: 50,     suffix: "+",  label: "Años de experiencia",  large: false },
-  { value: 100000, suffix: "+",  label: "Autos vendidos",        large: true  },
+  { value: 3000, suffix: "+",  label: "Autos vendidos",        large: true  },
   { value: 10,      suffix: "",   label: "Marcas oficiales",      large: false },
   { value: 200,    suffix: "+",  label: "Unidades en stock",   large: false },
 ];
