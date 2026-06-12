@@ -37,7 +37,7 @@ const highlights = [
 
 const heroStats = [
   { value: "+50", label: "Años de trayectoria" },
-  { value: "07", label: "Marcas oficiales" },
+  { value: "10", label: "Marcas oficiales" },
   { value: "100%", label: "Repuestos originales" },
 ];
 

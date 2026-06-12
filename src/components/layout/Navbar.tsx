@@ -180,8 +180,8 @@ export default function Navbar() {
                 target="_blank" rel="noopener noreferrer"
                 className="flex flex-col items-end leading-none px-3 py-1.5 rounded-xl hover:bg-slate-50 transition-colors group"
               >
-                <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Serv. mecánico</span>
-                <span className="text-sm font-bold text-slate-700 group-hover:text-navy transition-colors">092 655 929</span>
+                <span className="text-[11px] font-bold tracking-[0.18em] uppercase text-slate-700 group-hover:text-navy transition-colors">Serv. mecánico</span>
+                <span className="text-sm font-bold text-slate-800 group-hover:text-navy transition-colors">092 655 929</span>
               </a>
               <div className="w-px h-7 bg-slate-200" />
               <a
@@ -189,8 +189,8 @@ export default function Navbar() {
                 target="_blank" rel="noopener noreferrer"
                 className="flex flex-col items-end leading-none px-3 py-1.5 rounded-xl hover:bg-slate-50 transition-colors group"
               >
-                <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 group-hover:text-navy transition-colors">Automotora</span>
-                <span className="text-sm font-bold text-slate-700 group-hover:text-navy transition-colors">097 734 751</span>
+                <span className="text-[11px] font-bold tracking-[0.18em] uppercase text-slate-700 group-hover:text-navy transition-colors">Automotora</span>
+                <span className="text-sm font-bold text-slate-800 group-hover:text-navy transition-colors">097 734 751</span>
               </a>
             </div>
 

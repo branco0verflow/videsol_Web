@@ -9,7 +9,14 @@ interface Props {
 
 async function fetchVehicle(id: string): Promise<VehicleDetailAPI | null> {
   try {
-    const res = await fetch(`${API}/okm/${id}`, { cache: 'no-store' })
+    const { cookies } = await import('next/headers')
+    const cookieStore = await cookies()
+    const token = cookieStore.get('admin_token')?.value
+
+    const res = await fetch(`${API}/admin/okm/${id}`, {
+      cache: 'no-store',
+      headers: token ? { Cookie: `admin_token=${token}` } : {},
+    })
     if (!res.ok) return null
     return res.json() as Promise<VehicleDetailAPI>
   } catch {

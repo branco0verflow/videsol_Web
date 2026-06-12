@@ -33,6 +33,7 @@ export interface VehicleData {
 
 export interface VehicleAPI {
   id:                 number
+  slug?:              string
   code?:              string
   marca:              string
   modelo:             string
@@ -69,6 +70,7 @@ export interface ImagenUsadoAPI {
 
 export interface VehicleUsadoDetailAPI {
   id:                  number
+  slug?:               string
   activo:              boolean
   disponibleEnPilot?:  boolean
   pilotId?:            string | null
@@ -119,6 +121,7 @@ export interface CaracteristicasAPI {
 
 export interface VehicleDetailAPI {
   id:             number
+  slug?:          string
   code:           string
   marca:          string
   modelo:         string

@@ -12,9 +12,28 @@ import { API as API_BASE } from '@/lib/config'
 const PAGE_SIZE = 9
 
 // ─────────────────────────────────────────────
+// Orden
+// ─────────────────────────────────────────────
+export type OrdenValue = 'reciente' | 'precio-asc' | 'precio-desc'
+
+export const ORDEN_OPCIONES: { value: OrdenValue; label: string; sort: string; order: string }[] = [
+  { value: 'reciente',   label: 'Últimos ingresos',        sort: 'reciente', order: 'desc' },
+  { value: 'precio-asc',  label: 'Precio: menor a mayor',  sort: 'precio',   order: 'asc'  },
+  { value: 'precio-desc', label: 'Precio: mayor a menor',  sort: 'precio',   order: 'desc' },
+]
+
+const ORDEN_INICIAL: OrdenValue = 'reciente'
+
+// ─────────────────────────────────────────────
 // URL builders (module-level → referencia estable para useEffect)
 // ─────────────────────────────────────────────
-function buildUrlOkm(filtros: FiltrosState, page: number): string {
+function aplicarOrden(params: URLSearchParams, orden: OrdenValue) {
+  const opcion = ORDEN_OPCIONES.find((o) => o.value === orden) ?? ORDEN_OPCIONES[0]
+  params.set('sort',  opcion.sort)
+  params.set('order', opcion.order)
+}
+
+function buildUrlOkm(filtros: FiltrosState, page: number, orden: OrdenValue): string {
   const params = new URLSearchParams()
   params.set('page', String(page))
   params.set('size', String(PAGE_SIZE))
@@ -23,10 +42,11 @@ function buildUrlOkm(filtros: FiltrosState, page: number): string {
   if (filtros.combustible !== 'Todos')  params.set('combustible', filtros.combustible)
   if (filtros.transmision !== 'Todas')  params.set('transmision', filtros.transmision)
   if (filtros.precioMax   !== null)     params.set('precioMax',   String(filtros.precioMax))
+  aplicarOrden(params, orden)
   return `${API_BASE}/okm?${params.toString()}`
 }
 
-function buildUrlUsados(filtros: FiltrosState, page: number): string {
+function buildUrlUsados(filtros: FiltrosState, page: number, orden: OrdenValue): string {
   const params = new URLSearchParams()
   params.set('page', String(page))
   params.set('size', String(PAGE_SIZE))
@@ -37,14 +57,16 @@ function buildUrlUsados(filtros: FiltrosState, page: number): string {
   if (filtros.precioMax   !== null)     params.set('precioMax',   String(filtros.precioMax))
   if (filtros.kmMax       !== null)     params.set('kmMax',       String(filtros.kmMax))
   if (filtros.anioMin     !== null)     params.set('anioMin',     String(filtros.anioMin))
+  aplicarOrden(params, orden)
   return `${API_BASE}/usados?${params.toString()}`
 }
 
 // ─────────────────────────────────────────────
 // Hook compartido: estado + fetch + paginado
 // ─────────────────────────────────────────────
-function useVehicleSection(buildUrl: (f: FiltrosState, p: number) => string) {
+function useVehicleSection(buildUrl: (f: FiltrosState, p: number, o: OrdenValue) => string) {
   const [filtros,        setFiltros]        = useState<FiltrosState>(FILTROS_INICIALES)
+  const [orden,          setOrdenState]     = useState<OrdenValue>(ORDEN_INICIAL)
   const [vehicles,       setVehicles]       = useState<Vehicle[]>([])
   const [loading,        setLoading]        = useState(false)
   const [error,          setError]          = useState(false)
@@ -54,7 +76,7 @@ function useVehicleSection(buildUrl: (f: FiltrosState, p: number) => string) {
   const [esUltima,       setEsUltima]       = useState(true)
 
   useEffect(() => {
-    const url = buildUrl(filtros, page)
+    const url = buildUrl(filtros, page, orden)
     setLoading(true)
     setError(false)
     fetch(url)
@@ -69,18 +91,55 @@ function useVehicleSection(buildUrl: (f: FiltrosState, p: number) => string) {
       .finally(() => setLoading(false))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros.marca, filtros.carroceria, filtros.combustible, filtros.transmision,
-      filtros.precioMax, filtros.kmMax, filtros.anioMin, page])
+      filtros.precioMax, filtros.kmMax, filtros.anioMin, page, orden])
 
   const handleFiltrosChange = useCallback((nuevos: FiltrosState) => {
     setPage(0)
     setFiltros(nuevos)
   }, [])
 
+  const handleOrdenChange = useCallback((nuevo: OrdenValue) => {
+    setPage(0)
+    setOrdenState(nuevo)
+  }, [])
+
   return {
     vehicles, loading, error,
     page, setPage, totalPaginas, totalElementos, esUltima,
     filtros, handleFiltrosChange,
+    orden, handleOrdenChange,
   }
+}
+
+// ─────────────────────────────────────────────
+// Selector "Ordenar por"
+// ─────────────────────────────────────────────
+function OrdenarPor({ value, onChange }: { value: OrdenValue; onChange: (v: OrdenValue) => void }) {
+  return (
+    <label className="inline-flex items-center gap-2.5 bg-white border border-slate-200 rounded-lg pl-3 pr-2.5 py-2 shrink-0 shadow-sm">
+      <svg className="w-4 h-4 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h13M3 8h9M3 12h5m4 8l4-4m0 4l-4-4m4 4V4" />
+      </svg>
+      <span className="text-[11px] font-semibold tracking-wide text-slate-400 uppercase whitespace-nowrap">
+        Ordenar por
+      </span>
+      <span className="relative inline-flex items-center">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value as OrdenValue)}
+          suppressHydrationWarning
+          className="appearance-none text-[12.5px] font-semibold text-[#1e3a5f] bg-transparent pr-5 py-0.5 cursor-pointer focus:outline-none"
+        >
+          {ORDEN_OPCIONES.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+        <svg className="w-3.5 h-3.5 text-slate-400 absolute right-0 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </span>
+    </label>
+  )
 }
 
 // ─────────────────────────────────────────────
@@ -94,6 +153,7 @@ function SectionOkm() {
     vehicles, loading, error,
     page, setPage, totalPaginas, totalElementos, esUltima,
     handleFiltrosChange,
+    orden, handleOrdenChange,
   } = useVehicleSection(buildUrlOkm)
 
   useEffect(() => {
@@ -124,6 +184,9 @@ function SectionOkm() {
             <span className="text-[13px] text-slate-400 hidden sm:block shrink-0">
               {totalElementos} {totalElementos === 1 ? 'vehículo' : 'vehículos'} disponibles
             </span>
+          </div>
+          <div className="flex justify-start mt-4">
+            <OrdenarPor value={orden} onChange={handleOrdenChange} />
           </div>
         </div>
 
@@ -156,6 +219,7 @@ function SectionUsados() {
     vehicles, loading, error,
     page, setPage, totalPaginas, totalElementos, esUltima,
     handleFiltrosChange,
+    orden, handleOrdenChange,
   } = useVehicleSection(buildUrlUsados)
 
   useEffect(() => {
@@ -186,6 +250,9 @@ function SectionUsados() {
             <span className="text-[13px] text-slate-400 hidden sm:block shrink-0">
               {totalElementos} {totalElementos === 1 ? 'vehículo' : 'vehículos'} disponibles
             </span>
+          </div>
+          <div className="flex justify-start mt-4">
+            <OrdenarPor value={orden} onChange={handleOrdenChange} />
           </div>
         </div>
 

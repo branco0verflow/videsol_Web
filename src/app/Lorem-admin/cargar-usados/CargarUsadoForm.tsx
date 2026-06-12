@@ -13,7 +13,7 @@ const DIRECCIONES   = ['Eléctrica', 'Mecánica', 'Hidráulica', 'Electrohidráu
 const TIPOS         = ['Sedán', 'Hatchback', 'SUV', 'Pickup', 'Coupé', 'Convertible', 'Minivan', 'Furgón', 'Otro']
 const PUERTAS_OPT   = [2, 3, 4, 5]
 
-import { API_BASE } from '@/lib/config'
+import { adminFetch } from '@/lib/adminFetch'
 
 // ─── Características ──────────────────────────────────────────────────────────
 
@@ -278,7 +278,7 @@ export default function CargarUsadoForm({ vehiculo, onCancel, onSuccess }: Props
     try {
       const fd = new FormData()
       files.forEach((f) => fd.append('files', f))
-      const res = await fetch(`${API_BASE}/api/admin/imagenes/upload?carpeta=usados`, {
+      const res = await adminFetch('/admin/imagenes/upload?carpeta=usados', {
         method: 'POST',
         body:   fd,
       })
@@ -362,10 +362,9 @@ export default function CargarUsadoForm({ vehiculo, onCancel, onSuccess }: Props
 
     setSubmitting(true)
     try {
-      const res = await fetch(`${API_BASE}/api/admin/usados`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(body),
+      const res = await adminFetch('/admin/usados', {
+        method: 'POST',
+        body:   JSON.stringify(body),
       })
       if (!res.ok) throw new Error()
       setShowListo(true)

@@ -57,7 +57,7 @@ export default function VehicleCard({ vehicle, animationDelay = 0, catalogo = 'o
       onMouseLeave={handleMouseLeave}
       className="opacity-0"
     >
-      <Link href={`/vehiculos/${catalogo}/${vehicle.id}`} className="block">
+      <Link href={`/vehiculos/${catalogo}/${vehicle.slug ?? vehicle.id}`} className="block">
         <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden cursor-pointer transition-shadow duration-300 hover:shadow-[0_12px_32px_rgba(15,23,42,0.08)]">
 
           {/* Image */}

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import CargarVehiculoForm from './CargarVehiculoForm'
 import ToastListo from './ToastListo'
-import { API as API_BASE } from '@/lib/config'
+import { adminFetch } from '@/lib/adminFetch'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -104,7 +104,7 @@ export default function AdminPage() {
     setError(false)
     try {
       const params = new URLSearchParams({ marca: m, modelo: mo })
-      const res = await fetch(`${API_BASE}/admin/pilot/precios?${params}`)
+      const res = await adminFetch(`/admin/pilot/precios?${params}`)
       if (!res.ok) throw new Error()
       const data: PrecioItem[] = await res.json()
       setItems(data)
@@ -129,8 +129,8 @@ export default function AdminPage() {
 
   const handleToggleActivo = async (item: PrecioItem, activo: boolean) => {
     try {
-      const res = await fetch(
-        `${API_BASE}/admin/okm/code/${item.code}/activar?activo=${activo}`,
+      const res = await adminFetch(
+        `/admin/okm/code/${item.code}/activar?activo=${activo}`,
         { method: 'PATCH' }
       )
       if (!res.ok) throw new Error()
@@ -149,7 +149,7 @@ export default function AdminPage() {
   const handleEliminar = async (code: string) => {
     setDeletingCode(code)
     try {
-      const res = await fetch(`${API_BASE}/admin/okm/code/${code}`, { method: 'DELETE' })
+      const res = await adminFetch(`/admin/okm/code/${code}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       setShowListo(true)
       setTimeout(() => {

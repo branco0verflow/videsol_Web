@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import ToastListo from './0km/ToastListo'
-import { API } from '@/lib/config'
+import { adminFetch } from '@/lib/adminFetch'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -95,6 +96,8 @@ const ACCIONES = [
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AdminDashboard() {
+  const router = useRouter()
+
   const [inconsistencias, setInconsistencias] = useState<Inconsistencia[] | null>(null)
   const [detecting,       setDetecting]       = useState(false)
   const [detectError,     setDetectError]     = useState(false)
@@ -114,7 +117,7 @@ export default function AdminDashboard() {
     setDetecting(true)
     setDetectError(false)
     try {
-      const res = await fetch('${API}/admin/inconsistencias')
+      const res = await adminFetch('/admin/inconsistencias')
       if (!res.ok) throw new Error()
       const data: Inconsistencia[] = await res.json()
       setInconsistencias(data)
@@ -130,7 +133,7 @@ export default function AdminDashboard() {
   const eliminarRegistro = async (code: string) => {
     setDeletingCode(code)
     try {
-      const res = await fetch(`${API}/admin/okm/code/${code}`, { method: 'DELETE' })
+      const res = await adminFetch(`/admin/okm/code/${code}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       setShowListo(true)
       setTimeout(() => {
@@ -150,7 +153,7 @@ export default function AdminDashboard() {
     setDetectingUsados(true)
     setDetectErrorUsados(false)
     try {
-      const res = await fetch('${API}/admin/usados/inconsistencias')
+      const res = await adminFetch('/admin/usados/inconsistencias')
       if (!res.ok) throw new Error()
       const data: InconsistenciaUsado[] = await res.json()
       setInconsistenciasUsados(data)
@@ -168,7 +171,7 @@ export default function AdminDashboard() {
     try {
       // 1. Obtener vehículo con sus imágenes
       setDeletingStep('Obteniendo imágenes…')
-      const resVehiculo = await fetch(`${API}/admin/usados/${item.id}`)
+      const resVehiculo = await adminFetch(`/admin/usados/${item.id}`)
       if (!resVehiculo.ok) throw new Error()
       const vehiculo: UsadoConImagenes = await resVehiculo.json()
 
@@ -177,14 +180,14 @@ export default function AdminDashboard() {
         setDeletingStep(`Eliminando ${vehiculo.imagenes.length} imagen${vehiculo.imagenes.length !== 1 ? 'es' : ''}…`)
         await Promise.allSettled(
           vehiculo.imagenes.map((img) =>
-            fetch(`${API}/admin/imagenes?url=${encodeURIComponent(img.url)}`, { method: 'DELETE' })
+            adminFetch(`/admin/imagenes?url=${encodeURIComponent(img.url)}`, { method: 'DELETE' })
           )
         )
       }
 
       // 3. Eliminar de la DB
       setDeletingStep('Eliminando registro…')
-      const resDelete = await fetch(`${API}/admin/usados/${item.id}`, { method: 'DELETE' })
+      const resDelete = await adminFetch(`/admin/usados/${item.id}`, { method: 'DELETE' })
       if (!resDelete.ok) throw new Error()
 
       setShowListo(true)
@@ -200,21 +203,44 @@ export default function AdminDashboard() {
     }
   }
 
+  // ── Logout ────────────────────────────────────────────────────────────────
+
+  const handleLogout = async () => {
+    try {
+      await adminFetch('/auth/logout', { method: 'POST' })
+    } catch {
+      // ignorar — igual redirigimos al login
+    }
+    localStorage.removeItem('adminNombre')
+    router.push('/Lorem-admin/login')
+  }
+
   return (
     <div className="min-h-screen bg-slate-100">
 
       <ToastListo visible={showListo} />
 
       {/* Top bar */}
-      <header className="bg-[#1e3a5f] text-white px-6 py-3 flex items-center gap-4">
-        <Image src="/images/logo22.png" alt="Videsol" width={100} height={34} className="h-8 w-auto object-contain" />
-        <div className="w-px h-6 bg-white/20" />
-        <div>
-          <p className="text-[11px] text-white/50 font-medium tracking-widest uppercase leading-none">
-            Panel de administración
-          </p>
-          <p className="text-[15px] font-semibold leading-tight">Dashboard</p>
+      <header className="bg-[#1e3a5f] text-white px-6 py-3 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Image src="/images/logo22.png" alt="Videsol" width={100} height={34} className="h-8 w-auto object-contain" />
+          <div className="w-px h-6 bg-white/20" />
+          <div>
+            <p className="text-[11px] text-white/50 font-medium tracking-widest uppercase leading-none">
+              Panel de administración
+            </p>
+            <p className="text-[15px] font-semibold leading-tight">Dashboard</p>
+          </div>
         </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-[12px] font-semibold text-white/70 hover:text-white transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Cerrar sesión
+        </button>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-6">

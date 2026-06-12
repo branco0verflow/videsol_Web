@@ -46,8 +46,6 @@ const EQUIP_TABS = [
   },
 ]
 
-type EquipTabId = typeof EQUIP_TABS[number]['id']
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatKm(km: number) {
@@ -67,7 +65,6 @@ export default function VehicleDetailUsado({ vehicle }: Props) {
   const [activeIdx,     setActiveIdx]     = useState(0)
   const [transitioning, setTransitioning] = useState(false)
   const [paused,        setPaused]        = useState(false)
-  const [activeTab,     setActiveTab]     = useState<EquipTabId>('seguridad')
   const [modalOpen,     setModalOpen]     = useState(false)
 
   const mainImgRef = useRef<HTMLDivElement>(null)
@@ -104,8 +101,6 @@ export default function VehicleDetailUsado({ vehicle }: Props) {
   const goPrev = () => { setPaused(true); goTo(Math.max(0, activeIdx - 1)) }
   const goNext = () => { setPaused(true); goTo(Math.min(total - 1, activeIdx + 1)) }
 
-  const tabItems = vehicle.caracteristicas?.[activeTab] ?? []
-
   const specs = [
     { label: 'Combustible', value: vehicle.combustible           },
     { label: 'Transmisión', value: vehicle.transmision           },
@@ -132,11 +127,10 @@ export default function VehicleDetailUsado({ vehicle }: Props) {
         </div>
 
         {/* Main layout */}
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[58%_42%] lg:grid-rows-[auto_auto] gap-8 lg:gap-12 items-start">
 
-          {/* ── Left column: gallery + equipamiento ── */}
-          <div className="w-full lg:w-[58%] flex flex-col gap-6">
-            <div ref={mainImgRef} className="opacity-0">
+          {/* Gallery */}
+          <div ref={mainImgRef} className="opacity-0 order-1 lg:order-none lg:col-start-1 lg:row-start-1">
 
               {/* Main image */}
               <div
@@ -245,53 +239,47 @@ export default function VehicleDetailUsado({ vehicle }: Props) {
               )}
             </div>
 
-            {/* ── Equipamiento ── */}
-            {vehicle.caracteristicas && (
-              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          {/* ── Equipamiento ── */}
+          {vehicle.caracteristicas && (
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden order-3 lg:order-none lg:col-start-1 lg:row-start-2">
 
-                {/* Tabs */}
-                <div className="flex border-b border-slate-100">
-                  {EQUIP_TABS.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setActiveTab(cat.id)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-3.5 text-[12px] font-medium transition-all duration-150 border-b-2 ${
-                        activeTab === cat.id
-                          ? 'border-[#1e3a5f] text-[#1e3a5f]'
-                          : 'border-transparent text-slate-400 hover:text-slate-600'
-                      }`}
-                    >
-                      <span className={activeTab === cat.id ? 'text-[#1e3a5f]' : 'text-slate-300'}>
-                        {cat.icon}
-                      </span>
-                      {cat.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Items */}
-                <div className="p-5">
-                  {tabItems.length > 0 ? (
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
-                      {tabItems.map((item) => (
-                        <li key={item} className="flex items-center gap-2.5 text-[13px] text-slate-600">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#1e3a5f]/40 shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-[13px] text-slate-400">Sin información disponible.</p>
-                  )}
-                </div>
-
+              <div className="px-5 sm:px-6 py-4 border-b border-slate-100">
+                <p className="text-[10px] font-semibold tracking-[2px] text-slate-400 uppercase">
+                  Equipamiento
+                </p>
               </div>
-            )}
 
-          </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 divide-slate-100 sm:divide-x">
+                {EQUIP_TABS.map((cat) => {
+                  const items = vehicle.caracteristicas?.[cat.id] ?? []
+                  return (
+                    <div key={cat.id} className="p-5">
+                      <div className="flex items-center gap-2 mb-3.5">
+                        <span className="text-[#1e3a5f]">{cat.icon}</span>
+                        <h3 className="text-[12px] font-semibold text-slate-700">{cat.label}</h3>
+                      </div>
+                      {items.length > 0 ? (
+                        <ul className="flex flex-col gap-2.5">
+                          {items.map((item) => (
+                            <li key={item} className="flex items-start gap-2.5 text-[13px] text-slate-600">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#1e3a5f]/40 shrink-0 mt-1.5" />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-[12px] text-slate-400">Sin información disponible.</p>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+
+            </div>
+          )}
 
           {/* ── Info Panel (right) ── */}
-          <div ref={infoRef} className="w-full lg:w-[42%] lg:sticky lg:top-24 opacity-0">
+          <div ref={infoRef} className="order-2 lg:order-none lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-24 opacity-0">
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
 
               {/* Header */}
@@ -531,27 +519,17 @@ function ArrowBtn({
 }
 
 function ShareButton() {
-  const [open,   setOpen]   = useState(false)
   const [copied, setCopied] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
 
   const getUrl = () => typeof window !== 'undefined' ? window.location.href : ''
 
-  const handleShare = (platform: 'whatsapp' | 'facebook' | 'twitter' | 'instagram') => {
+  const handleShare = (platform: 'whatsapp' | 'facebook' | 'twitter' | 'copiar') => {
     const url  = encodeURIComponent(getUrl())
     const text = encodeURIComponent('Mirá este vehículo en Videsol: ')
-    if (platform === 'instagram') {
+    if (platform === 'copiar') {
       navigator.clipboard.writeText(getUrl())
       setCopied(true)
-      setTimeout(() => { setCopied(false); setOpen(false) }, 1600)
+      setTimeout(() => setCopied(false), 1600)
       return
     }
     const links = {
@@ -560,59 +538,61 @@ function ShareButton() {
       twitter:  `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
     }
     window.open(links[platform], '_blank', 'noopener,noreferrer,width=620,height=500')
-    setOpen(false)
   }
 
   return (
-    <div ref={ref} className="relative shrink-0">
+    <div className="flex items-center gap-1.5 shrink-0">
+      {/* WhatsApp */}
       <button
-        onClick={() => setOpen((p) => !p)}
-        suppressHydrationWarning
-        title="Compartir"
-        className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-400 hover:text-[#1e3a5f] transition-colors"
+        onClick={() => handleShare('whatsapp')}
+        title="Compartir por WhatsApp"
+        className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-[#25D366]/10 hover:border-[#25D366]/30 flex items-center justify-center transition-colors"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-[#25D366] shrink-0">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.528 5.855L.057 23.882a.5.5 0 0 0 .61.61l6.086-1.459A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 0 1-5.127-1.418l-.364-.216-3.792.91.944-3.706-.236-.374A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
         </svg>
       </button>
 
-      <div className={`absolute right-0 top-10 z-20 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden w-48 transition-all duration-200 origin-top-right ${
-        open ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-      }`}>
-        <div className="py-1.5">
-          {/* WhatsApp */}
-          <button onClick={() => handleShare('whatsapp')} className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-600 hover:bg-slate-50 hover:text-[#25D366] transition-colors font-medium">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-[#25D366] shrink-0">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/>
-              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.528 5.855L.057 23.882a.5.5 0 0 0 .61.61l6.086-1.459A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 0 1-5.127-1.418l-.364-.216-3.792.91.944-3.706-.236-.374A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-            </svg>
-            WhatsApp
-          </button>
-          {/* Facebook */}
-          <button onClick={() => handleShare('facebook')} className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-600 hover:bg-slate-50 hover:text-[#1877F2] transition-colors font-medium">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-[#1877F2] shrink-0">
-              <path d="M24 12.073C24 5.446 18.627 0 12 0S0 5.446 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-            </svg>
-            Facebook
-          </button>
-          {/* Twitter / X */}
-          <button onClick={() => handleShare('twitter')} className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors font-medium">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-slate-800 shrink-0">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            X (Twitter)
-          </button>
-          {/* Instagram — copia el enlace */}
-          <button onClick={() => handleShare('instagram')} className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-600 hover:bg-slate-50 hover:text-[#E1306C] transition-colors font-medium">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#E1306C] shrink-0">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-            </svg>
-            {copied ? '¡Enlace copiado!' : 'Copiar para Instagram'}
-          </button>
-        </div>
+      {/* Facebook */}
+      <button
+        onClick={() => handleShare('facebook')}
+        title="Compartir en Facebook"
+        className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-[#1877F2]/10 hover:border-[#1877F2]/30 flex items-center justify-center transition-colors"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-[#1877F2] shrink-0">
+          <path d="M24 12.073C24 5.446 18.627 0 12 0S0 5.446 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+        </svg>
+      </button>
+
+      {/* Twitter / X */}
+      <button
+        onClick={() => handleShare('twitter')}
+        title="Compartir en X"
+        className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-100 flex items-center justify-center transition-colors"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" className="text-slate-800 shrink-0">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.91-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </button>
+
+      {/* Copiar enlace */}
+      <div className="relative">
+        <button
+          onClick={() => handleShare('copiar')}
+          title="Copiar enlace"
+          className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-[#1e3a5f]/10 hover:border-[#1e3a5f]/30 flex items-center justify-center transition-colors"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#1e3a5f] shrink-0">
+            <path d="M10 13a5 5 0 007.07 0l2.83-2.83a5 5 0 00-7.07-7.07L11.5 4.5"/>
+            <path d="M14 11a5 5 0 00-7.07 0L4.1 13.83a5 5 0 007.07 7.07L12.5 19.5"/>
+          </svg>
+        </button>
+        {copied && (
+          <span className="absolute -bottom-8 right-0 whitespace-nowrap text-[11px] font-medium text-white bg-[#1e3a5f] px-2.5 py-1 rounded-lg shadow-md">
+            ¡Enlace copiado!
+          </span>
+        )}
       </div>
     </div>
   )

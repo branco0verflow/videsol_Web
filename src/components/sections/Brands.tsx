@@ -85,14 +85,14 @@ export default function Brands() {
             <div
               key={i}
               className="flex items-center justify-center mx-10 sm:mx-14"
-              style={{ width: 'clamp(80px, 12vw, 130px)', height: 'clamp(48px, 7vw, 70px)' }}
+              style={{ width: 'clamp(160px, 24vw, 260px)', height: 'clamp(96px, 14vw, 140px)' }}
             >
               <div className="relative w-full h-full">
                 <Image
                   src={brand.image}
                   alt={brand.name}
                   fill
-                  sizes="(max-width: 640px) 80px, (max-width: 1024px) 100px, 130px"
+                  sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 260px"
                   className="object-contain grayscale hover:grayscale-0 transition-[filter] duration-300"
                   draggable={false}
                 />

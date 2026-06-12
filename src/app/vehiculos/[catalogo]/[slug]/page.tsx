@@ -10,12 +10,12 @@ import { API } from '@/lib/config'
 type Catalogo = 'okm' | 'usados'
 
 interface Props {
-  params: Promise<{ catalogo: Catalogo; id: string }>
+  params: Promise<{ catalogo: Catalogo; slug: string }>
 }
 
-async function fetchOkm(id: string): Promise<VehicleDetailAPI | null> {
+async function fetchOkm(slug: string): Promise<VehicleDetailAPI | null> {
   try {
-    const res = await fetch(`${API}/okm/${id}`, {
+    const res = await fetch(`${API}/okm/slug/${slug}`, {
       next: { revalidate: 60 },
     })
     if (!res.ok) return null
@@ -25,9 +25,9 @@ async function fetchOkm(id: string): Promise<VehicleDetailAPI | null> {
   }
 }
 
-async function fetchUsado(id: string): Promise<VehicleUsadoDetailAPI | null> {
+async function fetchUsado(slug: string): Promise<VehicleUsadoDetailAPI | null> {
   try {
-    const res = await fetch(`${API}/usados/${id}`, {
+    const res = await fetch(`${API}/usados/slug/${slug}`, {
       next: { revalidate: 60 },
     })
     if (!res.ok) return null
@@ -38,10 +38,10 @@ async function fetchUsado(id: string): Promise<VehicleUsadoDetailAPI | null> {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { catalogo, id } = await params
+  const { catalogo, slug } = await params
 
   if (catalogo === 'okm') {
-    const v = await fetchOkm(id)
+    const v = await fetchOkm(slug)
     if (!v) return { title: 'Vehículo no encontrado | Videsol' }
     return {
       title: `${v.marca} ${v.modelo} ${v.version} | Videsol`,
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const v = await fetchUsado(id)
+  const v = await fetchUsado(slug)
   if (!v) return { title: 'Vehículo no encontrado | Videsol' }
   return {
     title: `${v.marca} ${v.modelo} ${v.version} | Videsol`,
@@ -58,12 +58,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function VehiclePage({ params }: Props) {
-  const { catalogo, id } = await params
+  const { catalogo, slug } = await params
 
   if (catalogo !== 'okm' && catalogo !== 'usados') notFound()
 
   if (catalogo === 'okm') {
-    const vehicle = await fetchOkm(id)
+    const vehicle = await fetchOkm(slug)
     if (!vehicle) notFound()
     return (
       <>
@@ -74,7 +74,7 @@ export default async function VehiclePage({ params }: Props) {
     )
   }
 
-  const vehicle = await fetchUsado(id)
+  const vehicle = await fetchUsado(slug)
   if (!vehicle) notFound()
   return (
     <>

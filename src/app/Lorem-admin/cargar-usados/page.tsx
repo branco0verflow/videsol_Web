@@ -23,7 +23,7 @@ export interface StockItem {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-import { API_BASE } from '@/lib/config'
+import { adminFetch } from '@/lib/adminFetch'
 
 const PAGE_SIZE = 20
 
@@ -104,7 +104,7 @@ export default function CargarUsadosPage() {
     setLoading(true)
     setError(false)
     try {
-      const res = await fetch(`${API_BASE}/api/admin/pilot/stock?page=${p}&limit=${PAGE_SIZE}`)
+      const res = await adminFetch(`/admin/pilot/stock?page=${p}&limit=${PAGE_SIZE}`)
       if (!res.ok) throw new Error()
       const data: StockItem[] = await res.json()
       setItems(data)

@@ -14,7 +14,7 @@ const DIRECCIONES   = ['Eléctrica', 'Mecánica', 'Hidráulica', 'Electrohidráu
 const TIPOS         = ['Sedán', 'Hatchback', 'SUV', 'Pickup', 'Coupé', 'Convertible', 'Minivan', 'Furgón', 'Otro']
 const PUERTAS_OPT   = [2, 3, 4, 5]
 
-import { API_BASE } from '@/lib/config'
+import { adminFetch } from '@/lib/adminFetch'
 
 // ─── Características ──────────────────────────────────────────────────────────
 
@@ -336,7 +336,7 @@ export default function EditarUsadoForm({ vehicle }: Props) {
     try {
       const fd = new FormData()
       files.forEach((f) => fd.append('files', f))
-      const res = await fetch(`${API_BASE}/api/admin/imagenes/upload?carpeta=usados`, {
+      const res = await adminFetch('/admin/imagenes/upload?carpeta=usados', {
         method: 'POST',
         body:   fd,
       })
@@ -379,7 +379,7 @@ export default function EditarUsadoForm({ vehicle }: Props) {
       if (removedUrls.length > 0) {
         await Promise.allSettled(
           removedUrls.map((url) =>
-            fetch(`${API_BASE}/api/admin/imagenes?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
+            adminFetch(`/admin/imagenes?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
           )
         )
       }
@@ -422,10 +422,9 @@ export default function EditarUsadoForm({ vehicle }: Props) {
       }
 
       // 3. PUT
-      const res = await fetch(`${API_BASE}/api/admin/usados/${vehicle.id}`, {
-        method:  'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(body),
+      const res = await adminFetch(`/admin/usados/${vehicle.id}`, {
+        method: 'PUT',
+        body:   JSON.stringify(body),
       })
       if (!res.ok) throw new Error()
 
