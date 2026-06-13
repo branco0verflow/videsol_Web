@@ -1,14 +1,14 @@
-import { API } from '@/lib/config'
-
 /**
  * Fetch para endpoints /api/admin/*.
+ * Usa una ruta relativa (proxeada por next.config.ts hacia el backend) para
+ * que la cookie admin_token quede asociada al dominio del frontend.
  * Envía la cookie admin_token automáticamente y redirige al login
  * si la sesión expiró o no es válida (401/403).
  */
 export async function adminFetch(path: string, options: RequestInit = {}) {
   const isFormData = options.body instanceof FormData
 
-  const res = await fetch(`${API}${path}`, {
+  const res = await fetch(`/api${path}`, {
     ...options,
     credentials: 'include',
     headers: {

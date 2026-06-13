@@ -44,7 +44,6 @@ interface Props {
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
-import { API_BASE } from '@/lib/config'
 const MAX_IMAGES    = 7
 
 const TIPOS         = ['Auto', 'SUV', 'Pick-Up', 'Hatchback', 'Sedán', 'Furgón', 'Crossover', 'Utilitario', 'Clásico']
@@ -465,7 +464,7 @@ export default function EditarVehiculoForm({ vehicle }: Props) {
     try {
       const fd = new FormData()
       color.files.forEach((f) => fd.append('files', f))
-      const res = await fetch(`${API_BASE}/api/admin/imagenes/upload?carpeta=okm`, { method: 'POST', credentials: 'include', body: fd })
+      const res = await fetch('/api/admin/imagenes/upload?carpeta=okm', { method: 'POST', body: fd })
       if (!res.ok) throw new Error()
       const { urls: newUrls }: { urls: string[] } = await res.json()
       if (fileRefs.current[idx]) fileRefs.current[idx]!.value = ''
@@ -527,10 +526,9 @@ export default function EditarVehiculoForm({ vehicle }: Props) {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/api/admin/okm/${vehicle.id}`, {
+      const res = await fetch(`/api/admin/okm/${vehicle.id}`, {
         method:  'PUT',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body:    JSON.stringify(body),
       })
       if (!res.ok) throw new Error()

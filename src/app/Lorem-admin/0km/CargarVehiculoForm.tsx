@@ -45,7 +45,6 @@ interface Props {
 
 // ─── Constantes ───────────────────────────────────────────────────────────────
 
-import { API_BASE } from '@/lib/config'
 
 const MAX_IMAGES   = 7
 
@@ -515,7 +514,7 @@ export default function CargarVehiculoForm({ vehiculo, onCancel, onSuccess }: Pr
     try {
       const fd = new FormData()
       color.files.forEach((f) => fd.append('files', f))
-      const res = await fetch(`${API_BASE}/api/admin/imagenes/upload?carpeta=okm`, {
+      const res = await fetch('/api/admin/imagenes/upload?carpeta=okm', {
         method: 'POST',
         body:   fd,
       })
@@ -576,7 +575,7 @@ export default function CargarVehiculoForm({ vehiculo, onCancel, onSuccess }: Pr
     }
 
     try {
-      const res = await fetch(`${API_BASE}/api/admin/okm`, {
+      const res = await fetch('/api/admin/okm', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(body),
