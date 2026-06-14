@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -45,7 +45,7 @@ interface UsadoConImagenes {
 const ACCIONES = [
   {
     href:        '/Lorem-admin/0km',
-    titulo:      'Gestión de visibilidad 0 km',
+    titulo:      'Crear 0km según precios de Pilot',
     descripcion: 'Consultá precios desde Pilot, activá o desactivá vehículos y cargá fichas técnicas.',
     icon: (
       <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
@@ -97,6 +97,12 @@ const ACCIONES = [
 
 export default function AdminDashboard() {
   const router = useRouter()
+
+  const [esSuper, setEsSuper] = useState(false)
+
+  useEffect(() => {
+    setEsSuper(localStorage.getItem('adminRolSuper') === 'true')
+  }, [])
 
   const [inconsistencias, setInconsistencias] = useState<Inconsistencia[] | null>(null)
   const [detecting,       setDetecting]       = useState(false)
@@ -266,6 +272,28 @@ export default function AdminDashboard() {
               </Link>
             </div>
           ))}
+
+          {/* ── Gestión de administradores (solo super admin) ── */}
+          {esSuper && (
+            <div className="rounded-2xl border p-6 flex flex-col gap-4 bg-slate-50 border-slate-200 text-slate-700">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 mt-0.5">
+                  <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-[16px] font-bold leading-snug">Gestión de administradores</h2>
+                  <p className="text-[13px] mt-1 opacity-80 leading-relaxed">
+                    Visualizá, creá, modificá o eliminá cuentas de administrador.
+                  </p>
+                </div>
+              </div>
+              <Link href="/Lorem-admin/administradores" className="self-start px-5 py-2 text-[13px] font-semibold text-white rounded-xl transition-colors bg-slate-700 hover:bg-slate-800">
+                Gestionar administradores →
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* ── Detectar inconsistencias ── */}
@@ -280,7 +308,7 @@ export default function AdminDashboard() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-[16px] font-bold leading-snug">Detectar inconsistencias</h2>
+                <h2 className="text-[16px] font-bold leading-snug">Detectar inconsistencias de 0KM</h2>
                 <p className="text-[13px] mt-1 opacity-80 leading-relaxed">
                   Encuentra vehículos cargados que ya no existen en Pilot.
                 </p>

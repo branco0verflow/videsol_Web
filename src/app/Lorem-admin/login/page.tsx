@@ -34,6 +34,7 @@ export default function AdminLoginPage() {
 
       if (data?.nombreAdmin) {
         localStorage.setItem('adminNombre', data.nombreAdmin)
+        localStorage.setItem('adminRolSuper', String(data.rolSuper));
       }
 
       setRedirecting(true)
