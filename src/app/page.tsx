@@ -8,6 +8,7 @@ import Taller from "@/components/sections/Taller";
 import AboutUs from "@/components/sections/AboutUs";
 import Contact from "@/components/sections/Contact";
 import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
+import Calificanos from "@/components/sections/Calificanos";
 
 export default function Home() {
   return (

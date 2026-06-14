@@ -361,7 +361,7 @@ function AdminFormModal({
   const [email,       setEmail]       = useState(admin?.email ?? '')
   const [password,    setPassword]    = useState('')
   const [rolSuper,    setRolSuper]    = useState(admin?.rolSuper ?? false)
-  const [activo,      setActivo]      = useState(admin?.activo ?? true)
+  const [activo,      setActivo]      = useState(admin?.activo ?? false)
 
   const [submitting, setSubmitting] = useState(false)
   const [error,      setError]      = useState<string | null>(null)
@@ -377,8 +377,8 @@ function AdminFormModal({
     setSubmitting(true)
     try {
       const body = isEdit
-        ? { nombreAdmin: nombreAdmin.trim(), email: email.trim(), rolSuper, activo }
-        : { nombreAdmin: nombreAdmin.trim(), email: email.trim(), password, rolSuper, activo }
+        ? { nombreAdmin: nombreAdmin.trim(), email: email.trim(), rolSuper: rolSuper, activo }
+        : { nombreAdmin: nombreAdmin.trim(), email: email.trim(), password: password, rolSuper: rolSuper, activo }
 
       const res = await adminFetch(
         isEdit ? `/admin/administradores/${admin.id}` : '/admin/administradores',
@@ -436,7 +436,6 @@ function AdminFormModal({
 
         <div className="flex flex-col gap-2.5 py-1">
           <CheckboxRow checked={rolSuper} onChange={setRolSuper} label="Super administrador (gestiona otros administradores)" />
-          <CheckboxRow checked={activo}   onChange={setActivo}   label="Cuenta activa" />
         </div>
 
         {error && (
@@ -474,7 +473,7 @@ function PasswordModal({
   onClose: () => void
   onSaved: () => void
 }) {
-  const [password,        setPassword]        = useState('')
+  const [passwordNueva,        setPasswordNueva]        = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error,      setError]      = useState<string | null>(null)
@@ -483,15 +482,15 @@ function PasswordModal({
     e.preventDefault()
     setError(null)
 
-    if (!password.trim())              return setError('La contraseña es requerida.')
-    if (password.length < 6)            return setError('La contraseña debe tener al menos 6 caracteres.')
-    if (password !== confirmPassword)  return setError('Las contraseñas no coinciden.')
+    if (!passwordNueva.trim())              return setError('La contraseña es requerida.')
+    if (passwordNueva.length < 6)            return setError('La contraseña debe tener al menos 6 caracteres.')
+    if (passwordNueva !== confirmPassword)  return setError('Las contraseñas no coinciden.')
 
     setSubmitting(true)
     try {
       const res = await adminFetch(`/admin/administradores/${admin.id}/password`, {
         method: 'PATCH',
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ passwordNueva }),
       })
 
       if (!res.ok) {
@@ -514,8 +513,8 @@ function PasswordModal({
         <Field label="Nueva contraseña" required>
           <input
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={passwordNueva}
+            onChange={(e) => setPasswordNueva(e.target.value)}
             placeholder="••••••••"
             className={inputCls}
           />
