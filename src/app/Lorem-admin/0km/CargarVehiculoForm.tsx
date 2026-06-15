@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { PrecioItem } from './page'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -609,15 +610,27 @@ export default function CargarVehiculoForm({ vehiculo, onCancel, onSuccess }: Pr
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
         {/* Breadcrumb */}
-        <button
-          onClick={onCancel}
-          className="flex items-center gap-1.5 text-[12px] text-slate-600 hover:text-[#1e3a5f] font-medium transition-colors"
-        >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver a resultados
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onCancel}
+            className="flex items-center gap-1.5 text-[12px] text-slate-600 hover:text-[#1e3a5f] font-medium transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Volver a resultados
+          </button>
+          <span className="text-slate-300">/</span>
+          <Link
+            href="/Lorem-admin"
+            className="flex items-center gap-1.5 text-[12px] text-slate-600 hover:text-[#1e3a5f] font-medium transition-colors"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Dashboard
+          </Link>
+        </div>
 
         {/* ── Datos de Pilot (readonly) ── */}
         <section className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">

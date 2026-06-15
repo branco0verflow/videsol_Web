@@ -10,8 +10,10 @@ import { API as API_BASE } from '@/lib/config'
 
 const PAGE_SIZE = 9
 
-function buildUrl(page: number) {
-  return `${API_BASE}/okm?page=${page}&size=${PAGE_SIZE}`
+function buildUrl(page: number, marca: string) {
+  const params = new URLSearchParams({ page: String(page), size: String(PAGE_SIZE) })
+  if (marca.trim()) params.set('marca', marca.trim())
+  return `${API_BASE}/okm?${params.toString()}`
 }
 
 function formatPrice(p: number) {
@@ -112,11 +114,22 @@ export default function Editar0kmPage() {
   const [totalPaginas,   setTotalPaginas]   = useState(0)
   const [totalElementos, setTotalElementos] = useState(0)
   const [esUltima,       setEsUltima]       = useState(true)
+  const [marca,          setMarca]          = useState('')
+  const [marcaFiltro,    setMarcaFiltro]    = useState('')
+
+  // Debounce: espera a que el admin termine de escribir antes de filtrar
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setPage(0)
+      setMarcaFiltro(marca)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [marca])
 
   useEffect(() => {
     setLoading(true)
     setError(false)
-    fetch(buildUrl(page))
+    fetch(buildUrl(page, marcaFiltro))
       .then((res) => { if (!res.ok) throw new Error(); return res.json() as Promise<PaginaVehiculos> })
       .then((data) => {
         setVehicles(data.contenido)
@@ -126,7 +139,7 @@ export default function Editar0kmPage() {
       })
       .catch(() => { setVehicles([]); setError(true) })
       .finally(() => setLoading(false))
-  }, [page])
+  }, [page, marcaFiltro])
 
   // GSAP on data change
   useEffect(() => {
@@ -167,13 +180,27 @@ export default function Editar0kmPage() {
         </Link>
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
           <h1 className="text-[22px] font-semibold text-slate-800">Vehículos 0 km</h1>
-          {!loading && !error && totalElementos > 0 && (
-            <span className="text-[13px] text-slate-400">
-              {totalElementos} {totalElementos === 1 ? 'vehículo' : 'vehículos'}
-            </span>
-          )}
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <svg className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+              </svg>
+              <input
+                type="text"
+                value={marca}
+                onChange={(e) => setMarca(e.target.value)}
+                placeholder="Filtrar por marca…"
+                className="pl-9 pr-3 py-2 text-[13px] text-slate-700 bg-white border border-slate-200 rounded-lg outline-none focus:border-[#1e3a5f] focus:ring-2 focus:ring-[#1e3a5f]/10 transition-all placeholder:text-slate-400 w-56"
+              />
+            </div>
+            {!loading && !error && totalElementos > 0 && (
+              <span className="text-[13px] text-slate-400 shrink-0">
+                {totalElementos} {totalElementos === 1 ? 'vehículo' : 'vehículos'}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Loading skeleton */}

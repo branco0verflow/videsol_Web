@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import CargarVehiculoForm from './CargarVehiculoForm'
 import ToastListo from './ToastListo'
 import { adminFetch } from '@/lib/adminFetch'
@@ -208,6 +209,17 @@ export default function AdminPage() {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+
+        {/* Breadcrumb */}
+        <Link
+          href="/Lorem-admin"
+          className="inline-flex items-center gap-1.5 text-[12px] text-slate-600 hover:text-[#1e3a5f] font-medium transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          Dashboard
+        </Link>
 
         {/* ── Search ── */}
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
