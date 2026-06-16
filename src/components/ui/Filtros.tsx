@@ -145,7 +145,7 @@ export default function Filtros({ onFiltrosChange, totalResultados, variant = 'o
   }, [onFiltrosChange])
 
   return (
-    <aside className="w-28 sm:w-36 md:w-45 shrink-0 self-start sticky top-24">
+    <aside className="w-28 sm:w-36 shrink-0 self-start sticky top-24">
       <div className="bg-white rounded-sm border border-slate-100 shadow-sm overflow-hidden">
 
         {/* ── Header ── */}

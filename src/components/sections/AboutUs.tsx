@@ -243,21 +243,32 @@ export default function AboutUs() {
             </div>
 
             <h2 className="about-heading text-[2rem] lg:text-[2.75rem] font-bold tracking-tight text-slate-900 leading-[1.1] text-balance mb-6">
-              Más de cuatro décadas<br />
-              <span className="text-gradient">al servicio</span> del<br />
-              automovilista uruguayo.
+              Más de cinco décadas<br />
+              <span className="text-gradient">poniendo tu vida</span><br />
+              sobre ruedas.
             </h2>
 
             <div className="about-body space-y-4 text-slate-500 leading-relaxed text-[15px] mb-10">
               <p>
-                Videsol se guía por una convicción clara:
-                cada persona merece encontrar el vehículo que se ajusta a sus necesidades,
-                respaldada por asesoramiento profesional, precios transparentes con servicio postventa.
+                No empezamos ayer. En más de cincuenta años vimos cambiar motores,
+                las tecnologías y las rutas — pero no cambiamos lo que
+                pensamos sobre este negocio: que un auto es una decisión importante, y que
+                la gente merece que alguien se la tome en serio. Eso es lo que hacemos desde el primer día.
               </p>
               <p>
-                Representantes oficiales de BYD, Nissan, Peugeot, Renault,
-                Citroën, Subaru y Riddara — con servicio mecánico certificado
-                para que tu inversión esté siempre respaldada.
+                Nuestro trabajo empieza cuando entrás por la puerta y no termina cuando salís con las llaves.{" "}
+                <span className="text-slate-700 font-medium">Te asesoramos para que elijas bien</span>, y después
+                nos ocupamos de que tu auto siga siendo una buena decisión con el tiempo.
+              </p>
+              <p>
+                El mismo equipo que te vendió el vehículo es el que lo conoce, lo mantiene y lo cuida — y lo hace desde{" "}
+                <span className="text-slate-700 font-medium">nuestro taller de servicio postventa oficial</span>,
+                con técnicos certificados por las marcas que representamos: Citroën, Peugeot, Renault, Nissan,
+                Subaru, BYD, Riddara, BAIC, KYC y Avantier.
+              </p>
+              <p>
+                Porque la continuidad en el servicio no es un detalle menor, es{" "}
+                <span className="text-slate-700 font-medium">lo que hace la diferencia entre un concesionario y una relación de confianza</span>.
               </p>
             </div>
 

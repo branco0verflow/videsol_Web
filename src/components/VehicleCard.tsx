@@ -76,16 +76,7 @@ export default function VehicleCard({ vehicle, animationDelay = 0, catalogo = 'o
               </div>
             )}
 
-            {/* Badge */}
-            <span
-              className={`absolute top-3 left-3 text-[10px] font-medium px-3 py-1 rounded-full tracking-wide ${
-                isNew
-                  ? 'bg-[#1e3a5f] text-white'
-                  : 'bg-white text-slate-500 border border-slate-200'
-              }`}
-            >
-              {isNew ? '0 km' : 'Usado'}
-            </span>
+            
 
             {/* Financiación badge */}
             {vehicle.financiacion && (

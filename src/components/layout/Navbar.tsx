@@ -19,6 +19,7 @@ const brands = [
   { name: "Subaru"  },
   { name: "Baic"    },
   { name: "KYC"     }, 
+  { name: "Avantier" },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

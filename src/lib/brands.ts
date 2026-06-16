@@ -12,7 +12,7 @@ export const BRAND_MAP: Record<string, BrandInfo> = {
   renault: { name: 'Renault', image: '/images/seccion/renault.png' },
   subaru:  { name: 'Subaru',  image: '/images/seccion/subaru.png' },
   baic: { name: 'Baic', image: '/images/seccion/baic.png' },
-  voyah: { name: 'Avantier', image: '/images/seccion/avantier.png' },
+  avantier: { name: 'Avantier', image: '/images/seccion/avantier.png' },
   kyc:  { name: 'KYC',  image: '/images/seccion/kyc.png' },
 }
 

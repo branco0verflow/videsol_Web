@@ -299,7 +299,7 @@ function VehiclesPanel({
     <div className="flex-1 min-w-0">
 
       {loading && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
           {Array.from({ length: PAGE_SIZE }).map((_, i) => (
             <div key={i} className="bg-white rounded-2xl border border-slate-100 h-72 animate-pulse" />
           ))}
@@ -314,7 +314,7 @@ function VehiclesPanel({
       )}
 
       {!loading && !error && vehicles.length > 0 && (
-        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
           {vehicles.map((vehicle, i) => (
             <div key={vehicle.id} className="vehicle-card-wrapper">
               {catalogo === 'usados'

@@ -67,10 +67,6 @@ export default function VehicleCardUsado({ vehicle, animationDelay = 0 }: Props)
               </div>
             )}
 
-            {/* Usado badge */}
-            <span className="absolute top-3 left-3 text-[10px] font-medium px-3 py-1 rounded-full tracking-wide bg-white text-slate-500 border border-slate-200">
-              Usado
-            </span>
 
             {/* Único dueño badge — top right */}
             <span className={`absolute top-3 right-3 flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1 rounded-full ${vehicle.unicoDueno

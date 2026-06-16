@@ -10,6 +10,7 @@ import { brandToSlug } from "@/lib/brands";
 
 const BRANDS = [
   "BYD", "Nissan", "Citroën", "Peugeot", "Riddara", "Renault", "Subaru",
+  "Baic", "KYC", "Avantier",
 ];
 
 const socialLinks = [
