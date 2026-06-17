@@ -250,25 +250,41 @@ export default function AboutUs() {
 
             <div className="about-body space-y-4 text-slate-500 leading-relaxed text-[15px] mb-10">
               <p>
-                No empezamos ayer. En más de cincuenta años vimos cambiar motores,
-                las tecnologías y las rutas — pero no cambiamos lo que
-                pensamos sobre este negocio: que un auto es una decisión importante, y que
-                la gente merece que alguien se la tome en serio. Eso es lo que hacemos desde el primer día.
+                Bienvenidos a VIDESOL somos referentes del mercado automotor en el departamento de Colonia,
+                respaldados por más de 50 años de trayectoria, experiencia y compromiso con nuestros clientes.
               </p>
               <p>
-                Nuestro trabajo empieza cuando entrás por la puerta y no termina cuando salís con las llaves.{" "}
-                <span className="text-slate-700 font-medium">Te asesoramos para que elijas bien</span>, y después
-                nos ocupamos de que tu auto siga siendo una buena decisión con el tiempo.
+                Representamos oficialmente diez reconocidas marcas internacionales: Citroën, Peugeot, Renault,
+                Nissan, Subaru, BYD, Riddara, BAIC, KYC y Avantier, ofreciendo una amplia variedad de vehículos
+                que se adaptan a las necesidades de cada cliente.
               </p>
               <p>
-                El mismo equipo que te vendió el vehículo es el que lo conoce, lo mantiene y lo cuida — y lo hace desde{" "}
-                <span className="text-slate-700 font-medium">nuestro taller de servicio postventa oficial</span>,
-                con técnicos certificados por las marcas que representamos: Citroën, Peugeot, Renault, Nissan,
-                Subaru, BYD, Riddara, BAIC, KYC y Avantier.
+                Nuestro compromiso va mucho más allá de la venta de automóviles. Brindamos una experiencia integral
+                que incluye{" "}
+                <span className="text-slate-700 font-medium">
+                  asesoramiento personalizado, opciones de financiación, vehículos nuevos y usados seleccionados,
+                  servicio técnico especializado, repuestos y accesorios originales
+                </span>
+                , además de un sólido respaldo posventa.
               </p>
               <p>
-                Porque la continuidad en el servicio no es un detalle menor, es{" "}
-                <span className="text-slate-700 font-medium">lo que hace la diferencia entre un concesionario y una relación de confianza</span>.
+                Contamos con instalaciones modernas, una ubicación estratégica y un equipo humano altamente
+                capacitado, enfocado en ofrecer{" "}
+                <span className="text-slate-700 font-medium">
+                  atención profesional, confianza y soluciones de calidad
+                </span>{" "}
+                en cada etapa del proceso.
+              </p>
+              <p>
+                La certificación de nuestros procesos y la satisfacción de miles de clientes a lo largo de los
+                años son el reflejo de una filosofía basada en la{" "}
+                <span className="text-slate-700 font-medium">
+                  excelencia, la transparencia y la mejora continua
+                </span>.
+              </p>
+              <p>
+                Lo esperamos para compartir nuestra experiencia, asesorarlo personalmente y ayudarlo a encontrar
+                el vehículo ideal para usted.
               </p>
             </div>
 

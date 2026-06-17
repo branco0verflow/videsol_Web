@@ -103,7 +103,7 @@ export default function Hero() {
           preload="auto"
           onError={() => setVideoFailed(true)}
         >
-          <source src="/videos/inicio.mp4" type="video/mp4" />
+          <source src="/videos/video11.mp4" type="video/mp4" />
         </video>
       )}
 

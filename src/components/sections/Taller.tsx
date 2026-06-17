@@ -29,17 +29,12 @@ const workshopBrands = [
 ];
 
 const highlights = [
-  { icon: Clock, text: "Más de 50 años de trayectoria" },
+  { icon: Clock, text: "Experiencia y trayectoria" },
   { icon: ShieldCheck, text: "Técnicos certificados por fábrica" },
   { icon: CheckCircle2, text: "Diagnóstico digital y repuestos originales" },
   { icon: Wrench, text: "Mantenimiento, garantía y servicio post-venta" },
 ];
 
-const heroStats = [
-  { value: "+50", label: "Años de trayectoria" },
-  { value: "10", label: "Marcas oficiales" },
-  { value: "100%", label: "Repuestos originales" },
-];
 
 // WhatsApp link — agendar turno
 const WHATSAPP_URL =
@@ -99,7 +94,7 @@ export default function Taller() {
     <section
       id="servicios"
       ref={sectionRef}
-      className="relative bg-[#f4f5f7] py-24 lg:py-32 border-y border-border overflow-hidden"
+      className="relative bg-[#f4f5f7] py-24 lg:py-15 border-y border-border overflow-hidden"
     >
       {/* Soft background ornamentation */}
       <div
@@ -111,7 +106,7 @@ export default function Taller() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 space-y-20">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 space-y-10">
         {/* ── Header ──────────────────────────────────────────────────── */}
         <div className="srv-header text-center max-w-3xl mx-auto">
           <div className="flex items-center justify-center gap-2.5 mb-5">
@@ -124,7 +119,7 @@ export default function Taller() {
           <h2 className="text-4xl lg:text-6xl font-black text-slate-900 leading-[1.05] tracking-tight">
             Servicio <span className="text-gradient">post-venta</span>
           </h2>
-          <p className="mt-6 text-slate-500 text-base lg:text-lg leading-relaxed">
+          <p className="mt-4 text-slate-500 text-base lg:text-lg leading-relaxed">
             Más de 50 años cuidando tu auto. Taller oficial de las marcas que
             representamos, con técnicos certificados y diagnóstico de última
             generación.
@@ -133,7 +128,7 @@ export default function Taller() {
 
         {/* ── Cinematic video block ───────────────────────────────────── */}
         <div className="srv-video relative">
-          <div className="relative aspect-4/3 sm:aspect-video lg:aspect-21/9 rounded-xl sm:rounded-4xl overflow-hidden ring-1 ring-black/5 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
+          <div className="relative aspect-4/3 sm:aspect-video lg:aspect-21/9 rounded-xl sm:rounded-2xl overflow-hidden ring-1 ring-black/5 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)]">
             <video
               className="absolute inset-0 w-full h-full object-cover"
               src="/videos/taller1.mp4"
@@ -162,31 +157,14 @@ export default function Taller() {
                 Tu auto, en manos<br />
                 <span className="text-crimson">expertas.</span>
               </h3>
-              <p className="mt-4 text-white/75 text-sm lg:text-base max-w-md leading-relaxed">
+              <p className="mt-4 mb-2 text-white/75 text-sm lg:text-base max-w-md leading-relaxed">
                 Equipamiento de diagnóstico de última generación y técnicos
                 certificados por cada marca que representamos.
               </p>
             </div>
           </div>
 
-          {/* ── Floating stat strip ─────────────────────────────────── */}
-          <div className="srv-stats relative -mt-10 lg:-mt-12 mx-4 lg:mx-12">
-            <div className="bg-white rounded-2xl shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] ring-1 ring-black/5 grid grid-cols-3 divide-x divide-slate-100">
-              {heroStats.map((s) => (
-                <div
-                  key={s.label}
-                  className="srv-stat px-3 sm:px-6 py-4 lg:py-6 flex flex-col items-start"
-                >
-                  <span className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
-                    {s.value}
-                  </span>
-                  <span className="mt-1 text-[9px] sm:text-[11px] lg:text-xs font-bold tracking-[0.12em] sm:tracking-[0.18em] uppercase text-slate-500">
-                    {s.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+          
         </div>
 
         {/* ── Workshop content (light) ────────────────────────────────── */}

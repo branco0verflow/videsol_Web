@@ -92,25 +92,6 @@ function Pill({ label, active, onClick }: { label: string; active: boolean; onCl
   )
 }
 
-function RadioRow({
-  label, active, onClick,
-}: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      suppressHydrationWarning
-      className={`flex items-center gap-2 text-left text-[11px] transition-colors duration-150 group ${
-        active ? 'text-[#1e3a5f] font-semibold' : 'text-slate-400 hover:text-slate-700'
-      }`}
-    >
-      <span className={`w-3 h-3 rounded-full border-2 shrink-0 transition-all ${
-        active ? 'border-[#1e3a5f] bg-[#1e3a5f]' : 'border-slate-300 group-hover:border-slate-400'
-      }`} />
-      {label}
-    </button>
-  )
-}
-
 function Divider() {
   return <hr className="border-slate-100" />
 }
@@ -217,9 +198,9 @@ export default function Filtros({ onFiltrosChange, totalResultados, variant = 'o
           {/* Precio máximo */}
           <div>
             <GroupLabel>Precio máximo</GroupLabel>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1">
               {RANGOS_PRECIO.map((r) => (
-                <RadioRow
+                <Pill
                   key={r.label}
                   label={r.label}
                   active={filtros.precioMax === r.value}
@@ -237,9 +218,9 @@ export default function Filtros({ onFiltrosChange, totalResultados, variant = 'o
               {/* Kilometraje máximo */}
               <div>
                 <GroupLabel>Kilometraje máx.</GroupLabel>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1">
                   {RANGOS_KM.map((r) => (
-                    <RadioRow
+                    <Pill
                       key={r.label}
                       label={r.label}
                       active={filtros.kmMax === r.value}
@@ -254,9 +235,9 @@ export default function Filtros({ onFiltrosChange, totalResultados, variant = 'o
               {/* Año mínimo */}
               <div>
                 <GroupLabel>Año mínimo</GroupLabel>
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col gap-1">
                   {ANIO_MIN_OPCIONES.map((r) => (
-                    <RadioRow
+                    <Pill
                       key={r.label}
                       label={r.label}
                       active={filtros.anioMin === r.value}

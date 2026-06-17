@@ -9,7 +9,7 @@ import type { PaginaVehiculos } from '@/types/vehicle'
 
 import { API as API_BASE } from '@/lib/config'
 
-const PAGE_SIZE = 9
+const PAGE_SIZE = 12
 
 // ─────────────────────────────────────────────
 // Orden
